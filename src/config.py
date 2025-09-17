@@ -1,5 +1,7 @@
 # PROJECT CONFIGURATION FILE
 
+import datetime
+
 # TIMEFRAME FOR DATA GENERATION
 START_DATE = "2022-01-01"
 END_DATE = "2024-12-31"
@@ -35,4 +37,18 @@ PLANS = [
     {"plan_id": 301, "product_id": 3, "plan_name": "Free",    "plan_price": 0,    "recurring": "monthly"},
     {"plan_id": 302, "product_id": 3, "plan_name": "Pro",     "plan_price": 200,  "recurring": "monthly"},
     {"plan_id": 303, "product_id": 3, "plan_name": "Premium", "plan_price": 2000, "recurring": "yearly"},
+]
+
+DISCOUNTS = [
+    {
+        "discount_id": 1,
+        "discount_code": "WELCOME20",
+        "discount_type": "percent",   # percent or fixed
+        "discount_value": 20,         # 20% off
+        "valid_from": datetime(2022, 1, 1),
+        "valid_to": datetime(2024, 12, 31),
+        "product_id": None,           # None = applies to all products
+        "plan_id": None,              # None = applies to all plans
+        "is_recurring": False,        # applies only once
+    }
 ]

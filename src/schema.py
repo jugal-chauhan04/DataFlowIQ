@@ -132,3 +132,60 @@ SUBSCRIPTIONS_SCHEMA = {
     },
 }
 
+DISCOUNTS_SCHEMA = {
+    "discount_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["PRIMARY KEY", "NOT NULL"],
+        "description": "Unique ID for each discount or coupon",
+    },
+    "discount_code": {
+        "type": "VARCHAR",
+        "python_type": str,
+        "constraints": ["UNIQUE", "NOT NULL"],
+        "description": "Code entered by customer to apply discount",
+    },
+    "discount_type": {
+        "type": "VARCHAR",
+        "python_type": str,
+        "constraints": ["NOT NULL", "ENUM('percent','fixed')"],
+        "description": "Type of discount: percentage or fixed amount",
+    },
+    "discount_value": {
+        "type": "DECIMAL(10,2)",
+        "python_type": float,
+        "constraints": ["NOT NULL"],
+        "description": "Value of the discount (percent or fixed amount)",
+    },
+    "valid_from": {
+        "type": "DATE",
+        "python_type": "datetime.date",
+        "constraints": ["NOT NULL"],
+        "description": "Start date when discount is valid",
+    },
+    "valid_to": {
+        "type": "DATE",
+        "python_type": "datetime.date",
+        "constraints": ["NOT NULL"],
+        "description": "End date when discount expires",
+    },
+    "product_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["FOREIGN KEY REFERENCES products(product_id)", "NULLABLE"],
+        "description": "Product the discount applies to (NULL = all products)",
+    },
+    "plan_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["FOREIGN KEY REFERENCES plans(plan_id)", "NULLABLE"],
+        "description": "Plan the discount applies to (NULL = all plans)",
+    },
+    "is_recurring": {
+        "type": "BOOLEAN",
+        "python_type": bool,
+        "constraints": ["NOT NULL"],
+        "description": "Whether the discount applies on every billing cycle",
+    },
+}
+

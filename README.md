@@ -62,3 +62,17 @@ And the schema is design is as shown below:
 | end_date        | DATE            | datetime.date       | NULLABLE                                                      | Date when the subscription ended (if cancelled or switched) |
 | status          | VARCHAR         | str                 | NOT NULL, ENUM('active','cancelled')                          | Current status of the subscription                 |
 | cancel_date     | DATE            | datetime.date       | NULLABLE                                                      | Date when the subscription was cancelled (if applicable) |
+
+## Discounts Table
+
+| Column Name   | Data Type (SQL) | Data Type (Python) | Constraints                                                   | Description                                          |
+|---------------|-----------------|--------------------|---------------------------------------------------------------|------------------------------------------------------|
+| discount_id   | INT             | int                | PRIMARY KEY, NOT NULL                                         | Unique ID for each discount or coupon                |
+| discount_code | VARCHAR         | str                | UNIQUE, NOT NULL                                              | Code entered by customer to apply discount           |
+| discount_type | VARCHAR         | str                | NOT NULL, ENUM('percent','fixed')                             | Type of discount: percentage or fixed amount         |
+| discount_value| DECIMAL(10,2)   | float              | NOT NULL                                                      | Value of the discount (percent or fixed amount)      |
+| valid_from    | DATE            | datetime.date      | NOT NULL                                                      | Start date when discount is valid                    |
+| valid_to      | DATE            | datetime.date      | NOT NULL                                                      | End date when discount expires                       |
+| product_id    | INT             | int                | FOREIGN KEY REFERENCES products(product_id), NULLABLE          | Product the discount applies to (NULL = all products)|
+| plan_id       | INT             | int                | FOREIGN KEY REFERENCES plans(plan_id), NULLABLE                | Plan the discount applies to (NULL = all plans)      |
+| is_recurring  | BOOLEAN         | bool               | NOT NULL                                                      | Whether the discount applies on every billing cycle  |

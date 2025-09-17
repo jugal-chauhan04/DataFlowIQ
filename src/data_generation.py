@@ -4,7 +4,7 @@ import pandas as pd
 import random
 from datetime import timedelta
 from faker import Faker 
-from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS, UPGRADE_PROBABILITY
+from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS, UPGRADE_PROBABILITY, DISCOUNTS
 
 fake = Faker()
 
@@ -139,6 +139,7 @@ def choose_new_plan(current_plan, plans):
 
 
 def generate_subscriptions(customers, plans):
+
     """
     Generate subscription records for each customer.
 
@@ -190,3 +191,14 @@ def generate_subscriptions(customers, plans):
             "cancel_date",
         ],
     )
+
+def generate_discounts() -> pd.DataFrame:
+    """
+    Return the static list of discounts as a DataFrame.
+
+    Discounts are defined in config.py to keep data generation flexible.
+    
+    Returns:
+        pd.DataFrame: DataFrame with discount information.
+    """
+    return pd.DataFrame(DISCOUNTS)
