@@ -6,7 +6,6 @@ When I started practicing SaaS metrics (MRR, churn, ARPU, etc.) and data modelin
 - Create **interactive dashboards** (Power BI, Tableau, Looker)
 - Stress test data models by scaling from **10 customers → 100k customers**  
 
----
 
 ## What it does  
 
@@ -30,7 +29,6 @@ Config-driven, easy to adjust:
   - Discount rules
   - Payment failure rates  
 
----
 
 # About DataFlowIQ
 
@@ -42,13 +40,11 @@ DataFlowIQ is a fictional SaaS company that provides a cloud-based productivity 
 
 All three products have three subscription tiers - Free, Pro, and Premium.  
 
----
 
 ## Schema Design
 
 [The Schema Design is show here](data/schema.md)  
-
----  
+ 
 
 ## How to use  
 
@@ -59,7 +55,6 @@ All three products have three subscription tiers - Free, Pro, and Premium.
 3. CSV files will be generated inside /data/
 4. Edit config.py to scale up the dataset or change behaviours  
 
----  
 
 ## Current Configuration  
 
@@ -73,7 +68,6 @@ At the current configuration, the dataset includes:
 
 This basic config will allow me to build a dbt pipeline and define metrics like MRR. Then, once that’s stable, I’ll scale it up (10k+ customers, 100k+ invoices) to test the durability and performance of my data models and dashboards.  
 
----
 
 ## Key Highlights
 - **Customer lifecycle simulation** → Customers subscribe to plans with randomized start dates, active/cancelled statuses, and end dates.  
@@ -84,8 +78,7 @@ This basic config will allow me to build a dbt pipeline and define metrics like 
 - **Payments** → Simulated payments for each invoice, with configurable failure probability (e.g., 30% fail, 70% success).  
 - **Config-driven** → Dates, upgrade probabilities, and failure rates are controlled in `config.py` for easy tuning.  
 - **Relational schema** → All tables are linked via foreign keys (e.g., customers → subscriptions → invoices → payments).  
-
----  
+  
 
 ## Limitations and Future Enhancements  
 
@@ -100,7 +93,11 @@ Planned enhancements include:
 - Usage-based billing models.  
 - Revenue recognition (invoiced vs recognized revenue).  
 
----
+## Ending Note  
+
+This project grew out of the need for a realistic SaaS billing dataset to practice metrics definition and data modeling. It’s small by design today, but fully scalable and I’ll keep expanding it to make it more realistic and useful for SaaS analytics.  
+
+
 
 
 
