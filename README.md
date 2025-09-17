@@ -8,7 +8,7 @@ DataFlowIQ is a fictional SaaS company that provides a cloud-based productivity 
 
 All three products have three subscription tiers - Free, Pro, and Premium
 
-#### I am tasked to create a centralized, scalable, and accurate data model that tracks revenue KPIs MRR and ARR and interactive dashboard that reflect organization's financial health.
+### I am tasked to create a centralized, scalable, and accurate data model that tracks revenue KPIs MRR and ARR and interactive dashboard that reflect organization's financial health.
 
 In this project, I am going to follow a typical payment billing schema for a SaaS organization, and start with 10 randomly generated entries as row values and scale the dataset to test the durability and reliability of my data model.  
 
