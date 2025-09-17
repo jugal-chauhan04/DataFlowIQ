@@ -41,3 +41,13 @@ And the schema is design is as shown below:
 | product_name       | VARCHAR         | str                | NOT NULL              | Name of the product                |
 | product_description| VARCHAR         | str                | NOT NULL              | Short description of the product   |
 
+## Plans Table
+
+| Column Name | Data Type (SQL) | Data Type (Python) | Constraints                                           | Description                               |
+|-------------|-----------------|--------------------|-------------------------------------------------------|-------------------------------------------|
+| plan_id     | INT             | int                | PRIMARY KEY, NOT NULL                                 | Unique ID for each plan                   |
+| product_id  | INT             | int                | FOREIGN KEY REFERENCES products(product_id), NOT NULL | ID of the product this plan belongs to    |
+| plan_name   | VARCHAR         | str                | NOT NULL                                              | Name of the plan (Free, Pro, Premium)     |
+| plan_price  | DECIMAL(10,2)   | float              | NOT NULL                                              | Price of the plan                         |
+| recurring   | VARCHAR         | str                | NOT NULL, ENUM('monthly','yearly')                    | Billing frequency of the plan             |
+

@@ -20,3 +20,16 @@ PRODUCTS = [
     {"product_id": 2, "product_name": "TeamCollab", "product_description": "Team collaboration platform"},
     {"product_id": 3, "product_name": "InsightIQ", "product_description": "Business analytics platform"},
 ]
+
+# PLANS
+PLANS = [
+    {"plan_id": 101, "product_id": 1, "plan_name": "Free",    "plan_price": 0,    "recurring": "monthly"},
+    {"plan_id": 102, "product_id": 1, "plan_name": "Pro",     "plan_price": 100,  "recurring": "monthly"},
+    {"plan_id": 103, "product_id": 1, "plan_name": "Premium", "plan_price": 1000, "recurring": "yearly"},
+    {"plan_id": 201, "product_id": 2, "plan_name": "Free",    "plan_price": 0,    "recurring": "monthly"},
+    {"plan_id": 202, "product_id": 2, "plan_name": "Pro",     "plan_price": 50,   "recurring": "monthly"},
+    {"plan_id": 203, "product_id": 2, "plan_name": "Premium", "plan_price": 400,  "recurring": "yearly"},
+    {"plan_id": 301, "product_id": 3, "plan_name": "Free",    "plan_price": 0,    "recurring": "monthly"},
+    {"plan_id": 302, "product_id": 3, "plan_name": "Pro",     "plan_price": 200,  "recurring": "monthly"},
+    {"plan_id": 303, "product_id": 3, "plan_name": "Premium", "plan_price": 2000, "recurring": "yearly"},
+]

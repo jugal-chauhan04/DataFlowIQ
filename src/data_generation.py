@@ -2,7 +2,7 @@ import re
 import numpy as np 
 import pandas as pd 
 from faker import Faker 
-from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS
+from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS
 
 fake = Faker()
 
@@ -69,3 +69,15 @@ def generate_products(products: list = None) -> pd.DataFrame:
         products = PRODUCTS
 
     return pd.DataFrame(products)
+
+def generate_plans() -> pd.DataFrame:
+    """
+    Return the static list of subscription plans as a DataFrame.
+
+    Plans are defined in config.py to keep business logic separate
+    from generation logic.
+    
+    Returns:
+        pd.DataFrame: DataFrame with plan information.
+    """
+    return pd.DataFrame(PLANS)
