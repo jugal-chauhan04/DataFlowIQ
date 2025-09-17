@@ -14,6 +14,9 @@ SEED = 44
 # EMAIL DOMAIN
 DOMAIN = "dataflowiq.com"  
 
+# UPGRADE PROBABILITY
+UPGRADE_PROBABILITY = 0.40 
+
 # DATAFLOWIQ PRODUCTS CATALOG 
 PRODUCTS = [
     {"product_id": 1, "product_name": "AutomateIQ", "product_description": "Workflow automation tool"},

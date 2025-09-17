@@ -51,3 +51,14 @@ And the schema is design is as shown below:
 | plan_price  | DECIMAL(10,2)   | float              | NOT NULL                                              | Price of the plan                         |
 | recurring   | VARCHAR         | str                | NOT NULL, ENUM('monthly','yearly')                    | Billing frequency of the plan             |
 
+## Subscriptions Table
+
+| Column Name     | Data Type (SQL) | Data Type (Python)  | Constraints                                                   | Description                                        |
+|-----------------|-----------------|---------------------|---------------------------------------------------------------|----------------------------------------------------|
+| subscription_id | INT             | int                 | PRIMARY KEY, NOT NULL                                         | Unique ID for each subscription record             |
+| customer_id     | INT             | int                 | FOREIGN KEY REFERENCES customers(customer_id), NOT NULL        | The customer associated with this subscription     |
+| plan_id         | INT             | int                 | FOREIGN KEY REFERENCES plans(plan_id), NOT NULL                | The plan this subscription belongs to              |
+| start_date      | DATE            | datetime.date       | NOT NULL                                                      | Date when the subscription started                 |
+| end_date        | DATE            | datetime.date       | NULLABLE                                                      | Date when the subscription ended (if cancelled or switched) |
+| status          | VARCHAR         | str                 | NOT NULL, ENUM('active','cancelled')                          | Current status of the subscription                 |
+| cancel_date     | DATE            | datetime.date       | NULLABLE                                                      | Date when the subscription was cancelled (if applicable) |
