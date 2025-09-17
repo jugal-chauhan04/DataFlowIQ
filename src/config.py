@@ -10,3 +10,6 @@ N_PLANS = 9
 
 # RANDOM SEED
 SEED = 44
+
+# EMAIL DOMAIN
+DOMAIN = "dataflowiq.com"
