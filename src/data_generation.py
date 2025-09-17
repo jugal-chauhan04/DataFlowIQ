@@ -4,7 +4,7 @@ import pandas as pd
 import random
 from datetime import timedelta
 from faker import Faker 
-from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS, UPGRADE_PROBABILITY, DISCOUNTS, SUB_DISCOUNT_ID
+from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS, UPGRADE_PROBABILITY, DISCOUNTS, SUB_DISCOUNT_ID, MONTHLY_CYCLE_DAYS, YEARLY_CYCLE_DAYS
 
 fake = Faker()
 
@@ -251,3 +251,107 @@ def generate_subscription_discounts(subscriptions, plans, discounts):
             "expiry_date",
         ],
     )
+
+def create_line_item(line_item_id, invoice_id, plan_id, description, amount, line_type):
+    """
+    Helper to create a line item record.
+    """
+    return [line_item_id, invoice_id, plan_id, description, amount, line_type]
+
+
+def apply_discounts(line_items, line_item_id, invoice_id, plan, invoice_date, sub, discounts, subscription_discounts, cycle_number):
+    """
+    Check and apply discounts for a given subscription cycle.
+    """
+    active_discounts = subscription_discounts[subscription_discounts.subscription_id == sub.subscription_id]
+    for _, sd in active_discounts.iterrows():
+        if sd.applied_date <= invoice_date <= (sd.expiry_date or END_DATE):
+            disc = discounts[discounts.discount_id == sd.discount_id].iloc[0]
+
+            # Recurring or first cycle only
+            if disc.is_recurring or (not disc.is_recurring and cycle_number == 0):
+                if disc.discount_type == "percent":
+                    discount = -plan.plan_price * (disc.discount_value / 100)
+                else:
+                    discount = -disc.discount_value
+                line_items.append(
+                    create_line_item(line_item_id, invoice_id, None, f"Coupon {disc.discount_code}", discount, "discount")
+                )
+                line_item_id += 1
+    return line_item_id
+
+
+def generate_payments_invoice(subscriptions, plans, discounts, subscription_discounts):
+    """
+    Generate invoices, line items, and payments for subscriptions.
+
+    Args:
+        subscriptions (pd.DataFrame)
+        plans (pd.DataFrame)
+        discounts (pd.DataFrame)
+        subscription_discounts (pd.DataFrame)
+
+    Returns:
+        invoices_df, line_items_df, payments_df
+    """
+    invoices, line_items, payments = [], [], []
+    invoice_id, line_item_id, payment_id = 1001, 5001, 9001
+
+    for _, sub in subscriptions.iterrows():
+        plan = plans[plans.plan_id == sub.plan_id].iloc[0]
+
+        # Determine billing cycle
+        cycle_days = MONTHLY_CYCLE_DAYS if plan.recurring == "monthly" else YEARLY_CYCLE_DAYS
+
+        cycle_number = 0
+        while True:
+            invoice_date = sub.start_date + timedelta(days=cycle_days * cycle_number)
+            if invoice_date > END_DATE:
+                break
+            if sub.end_date and invoice_date > sub.end_date:
+                break
+
+            # Base plan line item
+            line_items.append(
+                create_line_item(line_item_id, invoice_id, plan.plan_id, f"{plan.plan_name} Plan", plan.plan_price, "charge")
+            )
+            line_item_id += 1
+
+            # Discounts
+            if plan.plan_price > 0:
+                line_item_id = apply_discounts(
+                    line_items, line_item_id, invoice_id, plan, invoice_date, sub, discounts, subscription_discounts, cycle_number
+                )
+
+            # Total for this invoice
+            total = sum(li[4] for li in line_items if li[1] == invoice_id)
+
+            # Payment + invoice
+            if plan.plan_price == 0.0:
+                # Free plan
+                invoices.append([invoice_id, sub.subscription_id, invoice_date, 0.0, "paid"])
+                payments.append([payment_id, invoice_id, invoice_date + timedelta(days=1), 0.0, "success", "N/A"])
+            else:
+                status = np.random.choice(["success", "failed"], p=[0.7, 0.3])
+                amount_paid = total if status == "success" else 0
+                payments.append([
+                    payment_id,
+                    invoice_id,
+                    invoice_date + timedelta(days=1),
+                    amount_paid,
+                    status,
+                    np.random.choice(["Debit", "Credit", "Paypal"]),
+                ])
+                invoice_status = "paid" if status == "success" else "pending"
+                invoices.append([invoice_id, sub.subscription_id, invoice_date, total, invoice_status])
+
+            # Increment counters
+            payment_id += 1
+            invoice_id += 1
+            cycle_number += 1
+
+    invoices_df = pd.DataFrame(invoices, columns=["invoice_id", "subscription_id", "invoice_date", "total_due", "invoice_status"])
+    line_items_df = pd.DataFrame(line_items, columns=["line_item_id", "invoice_id", "plan_id", "description", "amount", "line_type"])
+    payments_df = pd.DataFrame(payments, columns=["payment_id", "invoice_id", "payment_date", "amount_paid", "payment_status", "payment_method"])
+
+    return invoices_df, line_items_df, payments_df
