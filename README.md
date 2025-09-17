@@ -1,4 +1,4 @@
-### Designing DataFlowIQ Schema  
+# Designing DataFlowIQ Schema  
 
 DataFlowIQ is a fictional SaaS company that provides a cloud-based productivity suite for small and mid-sized businesses. Its core mission is to help teams automate workflows, analyze performance, and collaborate effectively. They have three products:  
 
