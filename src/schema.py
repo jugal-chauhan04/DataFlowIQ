@@ -189,3 +189,36 @@ DISCOUNTS_SCHEMA = {
     },
 }
 
+SUBSCRIPTION_DISCOUNTS_SCHEMA = {
+    "sub_discount_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["PRIMARY KEY", "NOT NULL"],
+        "description": "Unique ID for each subscription-discount relationship",
+    },
+    "subscription_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["FOREIGN KEY REFERENCES subscriptions(subscription_id)", "NOT NULL"],
+        "description": "The subscription this discount is applied to",
+    },
+    "discount_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["FOREIGN KEY REFERENCES discounts(discount_id)", "NOT NULL"],
+        "description": "The discount applied to the subscription",
+    },
+    "applied_date": {
+        "type": "DATE",
+        "python_type": "datetime.date",
+        "constraints": ["NOT NULL"],
+        "description": "Date when discount was applied (usually subscription start date)",
+    },
+    "expiry_date": {
+        "type": "DATE",
+        "python_type": "datetime.date",
+        "constraints": ["NULLABLE"],
+        "description": "Date when discount expired (usually subscription end date)",
+    },
+}
+

@@ -76,3 +76,13 @@ And the schema is design is as shown below:
 | product_id    | INT             | int                | FOREIGN KEY REFERENCES products(product_id), NULLABLE          | Product the discount applies to (NULL = all products)|
 | plan_id       | INT             | int                | FOREIGN KEY REFERENCES plans(plan_id), NULLABLE                | Plan the discount applies to (NULL = all plans)      |
 | is_recurring  | BOOLEAN         | bool               | NOT NULL                                                      | Whether the discount applies on every billing cycle  |
+
+## Subscription_Discounts Table
+
+| Column Name             | Data Type (SQL) | Data Type (Python) | Constraints                                                               | Description                                                 |
+|--------------------------|-----------------|--------------------|---------------------------------------------------------------------------|-------------------------------------------------------------|
+| sub_discount_id | INT             | int                | PRIMARY KEY, NOT NULL                                                     | Unique ID for each subscription-discount relationship       |
+| subscription_id          | INT             | int                | FOREIGN KEY REFERENCES subscriptions(subscription_id), NOT NULL           | The subscription this discount is applied to                |
+| discount_id              | INT             | int                | FOREIGN KEY REFERENCES discounts(discount_id), NOT NULL                   | The discount applied to the subscription                    |
+| applied_date             | DATE            | datetime.date      | NOT NULL                                                                  | Date when discount was applied (usually subscription start) |
+| expiry_date              | DATE            | datetime.date      | NULLABLE                                                                  | Date when discount expired (usually subscription end date)  |

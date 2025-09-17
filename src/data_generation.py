@@ -4,7 +4,7 @@ import pandas as pd
 import random
 from datetime import timedelta
 from faker import Faker 
-from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS, UPGRADE_PROBABILITY, DISCOUNTS
+from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS, UPGRADE_PROBABILITY, DISCOUNTS, SUB_DISCOUNT_ID
 
 fake = Faker()
 
@@ -193,6 +193,7 @@ def generate_subscriptions(customers, plans):
     )
 
 def generate_discounts() -> pd.DataFrame:
+
     """
     Return the static list of discounts as a DataFrame.
 
@@ -202,3 +203,51 @@ def generate_discounts() -> pd.DataFrame:
         pd.DataFrame: DataFrame with discount information.
     """
     return pd.DataFrame(DISCOUNTS)
+
+def generate_subscription_discounts(subscriptions, plans, discounts):
+    """
+    Generate a mapping of subscriptions to applied discounts.
+
+    Args:
+        subscriptions (pd.DataFrame): Subscriptions dataset
+        plans (pd.DataFrame): Plans dataset
+        discounts (pd.DataFrame): Discounts dataset
+
+    Returns:
+        pd.DataFrame: Subscription discounts dataset
+    """
+    rows = []
+    sub_discount_id = SUB_DISCOUNT_ID
+    
+    # Randomly assign discounts to ~50% of subscriptions
+    for _, sub in subscriptions.sample(frac=0.5).iterrows():
+        # Fetch the plan
+        plan = plans[plans.plan_id == sub.plan_id].iloc[0]
+        
+        # Skip free plans (no discounts on already free tiers)
+        if plan.plan_price == 0:
+            continue
+        
+        # Otherwise assign a random discount
+        discount = discounts.sample(1).iloc[0]
+        
+        rows.append([
+            sub_discount_id,
+            sub.subscription_id,
+            discount.discount_id,
+            sub.start_date,
+            sub.end_date
+        ])
+        
+        sub_discount_id += 1
+    
+    return pd.DataFrame(
+        rows,
+        columns=[
+            "subscription_discount_id",
+            "subscription_id",
+            "discount_id",
+            "applied_date",
+            "expiry_date",
+        ],
+    )

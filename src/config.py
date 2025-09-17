@@ -19,6 +19,9 @@ DOMAIN = "dataflowiq.com"
 # UPGRADE PROBABILITY
 UPGRADE_PROBABILITY = 0.40 
 
+# SUBSCRIPTION DISCOUNT START ID
+SUB_DISCOUNT_ID = 401
+
 # DATAFLOWIQ PRODUCTS CATALOG 
 PRODUCTS = [
     {"product_id": 1, "product_name": "AutomateIQ", "product_description": "Workflow automation tool"},
