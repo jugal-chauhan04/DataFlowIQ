@@ -25,7 +25,7 @@ def generate_email(name: str, domain: str, existing: set) -> str:
     existing.add(email)
     return email 
 
-def generate_customer(n: int = N_CUSTOMERS, domain: str = DOMAIN) -> pd.DataFrame:
+def generate_customers(n: int = N_CUSTOMERS, domain: str = DOMAIN) -> pd.DataFrame:
     """
     Generate a synthetic dataset of customer name, email, address, and payment method
 
@@ -109,7 +109,6 @@ def generate_subscription_row(sub_id, customer_id, plan, start_date, status=None
         cancel_date,
     ]
 
-
 def choose_new_plan(current_plan, plans):
     """
     Given a current plan, choose a new plan for upgrade/downgrade.
@@ -136,7 +135,6 @@ def choose_new_plan(current_plan, plans):
         ].sample(1).iloc[0]
     
     return None
-
 
 def generate_subscriptions(customers, plans):
 
@@ -258,7 +256,6 @@ def create_line_item(line_item_id, invoice_id, plan_id, description, amount, lin
     """
     return [line_item_id, invoice_id, plan_id, description, amount, line_type]
 
-
 def apply_discounts(line_items, line_item_id, invoice_id, plan, invoice_date, sub, discounts, subscription_discounts, cycle_number):
     """
     Check and apply discounts for a given subscription cycle.
@@ -279,7 +276,6 @@ def apply_discounts(line_items, line_item_id, invoice_id, plan, invoice_date, su
                 )
                 line_item_id += 1
     return line_item_id
-
 
 def generate_payments_invoice(subscriptions, plans, discounts, subscription_discounts):
     """

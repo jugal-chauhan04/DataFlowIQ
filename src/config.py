@@ -1,10 +1,10 @@
 # PROJECT CONFIGURATION FILE
 
-import datetime
+from datetime import datetime
 
 # TIMEFRAME FOR DATA GENERATION
-START_DATE = "2022-01-01"
-END_DATE = "2024-12-31"
+START_DATE = datetime(2022, 1, 1)
+END_DATE = datetime(2024, 12, 31)
 
 # DATASET SIZES
 N_CUSTOMERS = 10
