@@ -2,7 +2,7 @@ import re
 import numpy as np 
 import pandas as pd 
 from faker import Faker 
-from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN
+from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS
 
 fake = Faker()
 
@@ -53,3 +53,19 @@ def generate_customer(n: int = N_CUSTOMERS, domain: str = DOMAIN) -> pd.DataFram
 
     return customers
 
+def generate_products(products: list = None) -> pd.DataFrame:
+    """
+    Generate a synthetic dataset of products.
+
+    Args:
+        products (list, optional): List of product dictionaries with keys 
+                                   'product_id', 'product_name', 'product_description'.
+                                   If None, defaults to PRODUCTS from config.py.
+
+    Returns:
+        pd.DataFrame: DataFrame with product information.
+    """
+    if products is None:
+        products = PRODUCTS
+
+    return pd.DataFrame(products)

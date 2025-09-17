@@ -33,3 +33,11 @@ And the schema is design is as shown below:
 | customer_address | VARCHAR         | str                | NULLABLE                     | Mailing address (synthetic from Faker)   |
 | payment_method   | VARCHAR         | str (categorical)  | NOT NULL, ENUM (Credit/Debit/Paypal) | Preferred payment method                 |
 
+## Products Table
+
+| Column Name        | Data Type (SQL) | Data Type (Python) | Constraints           | Description                        |
+|--------------------|-----------------|--------------------|-----------------------|------------------------------------|
+| product_id         | INT             | int                | PRIMARY KEY, NOT NULL | Unique ID for each product         |
+| product_name       | VARCHAR         | str                | NOT NULL              | Name of the product                |
+| product_description| VARCHAR         | str                | NOT NULL              | Short description of the product   |
+
