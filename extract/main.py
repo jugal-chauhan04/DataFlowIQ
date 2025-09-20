@@ -1,4 +1,6 @@
 import pandas as pd
+from log.logging_config import setup_logging
+from load.load_to_bq import load_to_biquery
 from data_generation import (
     generate_customers,
     generate_products,
@@ -11,7 +13,7 @@ from data_generation import (
 
 def main():
     # 1. Generate base data
-    customers = generate_customers()
+    customers = generate_customers(5)
     products = generate_products()
     plans = generate_plans()
 
@@ -37,6 +39,19 @@ def main():
     payments.to_csv("../data/payments.csv", index=False)
 
     print("Data generation complete, CSVs saved in /data")
+
+    # 6. Load to Bigquery (Appends data instead of overwriting)
+    load_to_biquery(customers, "customers")
+    load_to_biquery(products, "products")
+    load_to_biquery(plans, "plans")
+    load_to_biquery(subscriptions, "subscriptions")
+    load_to_biquery(discounts, "discounts")
+    load_to_biquery(subscription_discounts, "subscription_discounts")
+    load_to_biquery(invoices, "invoices")
+    load_to_biquery(line_items, "line_items")
+    load_to_biquery(payments, "payments")
+
+    print("Data generation and bigquery load complete")
 
 if __name__ == "__main__":
     main()
