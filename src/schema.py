@@ -223,29 +223,114 @@ SUBSCRIPTION_DISCOUNTS_SCHEMA = {
 }
 
 INVOICES_SCHEMA = {
-    "invoice_id": {"type": "INT", "python_type": int, "constraints": ["PRIMARY KEY", "NOT NULL"], "description": "Unique invoice ID"},
-    "subscription_id": {"type": "INT", "python_type": int, "constraints": ["FOREIGN KEY REFERENCES subscriptions(subscription_id)", "NOT NULL"], "description": "The subscription associated with this invoice"},
-    "invoice_date": {"type": "DATE", "python_type": "datetime.date", "constraints": ["NOT NULL"], "description": "Date of the invoice"},
-    "total_due": {"type": "DECIMAL(10,2)", "python_type": float, "constraints": ["NOT NULL"], "description": "Total amount due for the invoice"},
-    "invoice_status": {"type": "VARCHAR", "python_type": str, "constraints": ["NOT NULL", "ENUM('paid','pending')"], "description": "Invoice payment status"},
+    "invoice_id": {
+        "type": "INT", 
+        "python_type": int, 
+        "constraints": ["PRIMARY KEY", "NOT NULL"], 
+        "description": "Unique invoice ID"
+    },
+    "subscription_id": {
+        "type": "INT", 
+        "python_type": int, 
+        "constraints": ["FOREIGN KEY REFERENCES subscriptions(subscription_id)", "NOT NULL"],
+        "description": "The subscription associated with this invoice"
+    },
+    "invoice_date": {
+        "type": "DATE", 
+        "python_type": "datetime.date",
+        "constraints": ["NOT NULL"],
+        "description": "Date of the invoice"
+    },
+    "total_due": {
+        "type": "DECIMAL(10,2)",
+        "python_type": float,
+        "constraints": ["NOT NULL"],
+        "description": "Total amount due for the invoice"
+    },
+    "invoice_status": {
+        "type": "VARCHAR",
+        "python_type": str,
+        "constraints": ["NOT NULL", "ENUM('paid','pending')"],
+        "description": "Invoice payment status"
+    },
 }
 
 LINE_ITEMS_SCHEMA = {
-    "line_item_id": {"type": "INT", "python_type": int, "constraints": ["PRIMARY KEY", "NOT NULL"], "description": "Unique line item ID"},
-    "invoice_id": {"type": "INT", "python_type": int, "constraints": ["FOREIGN KEY REFERENCES invoices(invoice_id)", "NOT NULL"], "description": "Invoice associated with this line item"},
-    "plan_id": {"type": "INT", "python_type": int, "constraints": ["FOREIGN KEY REFERENCES plans(plan_id)", "NULLABLE"], "description": "Plan ID (NULL for discounts)"},
-    "description": {"type": "VARCHAR", "python_type": str, "constraints": ["NOT NULL"], "description": "Description of the line item"},
-    "amount": {"type": "DECIMAL(10,2)", "python_type": float, "constraints": ["NOT NULL"], "description": "Amount for this line item (negative for discounts)"},
-    "line_type": {"type": "VARCHAR", "python_type": str, "constraints": ["NOT NULL", "ENUM('charge','discount')"], "description": "Type of line item"},
+    "line_item_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["PRIMARY KEY", "NOT NULL"],
+        "description": "Unique line item ID"
+    },
+    "invoice_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["FOREIGN KEY REFERENCES invoices(invoice_id)", "NOT NULL"],
+        "description": "Invoice associated with this line item"
+    },
+    "plan_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["FOREIGN KEY REFERENCES plans(plan_id)", "NULLABLE"],
+        "description": "Plan ID (NULL for discounts)"
+    },
+    "description": {
+        "type": "VARCHAR",
+        "python_type": str,
+        "constraints": ["NOT NULL"],
+        "description": "Description of the line item"
+    },
+    "amount": {
+        "type": "DECIMAL(10,2)",
+        "python_type": float,
+        "constraints": ["NOT NULL"],
+        "description": "Amount for this line item (negative for discounts)"
+    },
+    "line_type": {
+        "type": "VARCHAR",
+        "python_type": str,
+        "constraints": ["NOT NULL", "ENUM('charge','discount')"],
+        "description": "Type of line item"
+    },
 }
 
 PAYMENTS_SCHEMA = {
-    "payment_id": {"type": "INT", "python_type": int, "constraints": ["PRIMARY KEY", "NOT NULL"], "description": "Unique payment ID"},
-    "invoice_id": {"type": "INT", "python_type": int, "constraints": ["FOREIGN KEY REFERENCES invoices(invoice_id)", "NOT NULL"], "description": "Invoice associated with the payment"},
-    "payment_date": {"type": "DATE", "python_type": "datetime.date", "constraints": ["NOT NULL"], "description": "Date of payment attempt"},
-    "amount_paid": {"type": "DECIMAL(10,2)", "python_type": float, "constraints": ["NOT NULL"], "description": "Amount actually paid"},
-    "payment_status": {"type": "VARCHAR", "python_type": str, "constraints": ["NOT NULL", "ENUM('success','failed')"], "description": "Payment status"},
-    "payment_method": {"type": "VARCHAR", "python_type": str, "constraints": ["NOT NULL", "ENUM('Credit','Debit','Paypal','N/A')"], "description": "Payment method used"},
+    "payment_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["PRIMARY KEY", "NOT NULL"],
+        "description": "Unique payment ID"
+    },
+    "invoice_id": {
+        "type": "INT",
+        "python_type": int,
+        "constraints": ["FOREIGN KEY REFERENCES invoices(invoice_id)", "NOT NULL"],
+        "description": "Invoice associated with the payment"
+    },
+    "payment_date": {
+        "type": "DATE",
+        "python_type": "datetime.date",
+        "constraints": ["NOT NULL"],
+        "description": "Date of payment attempt"
+    },
+    "amount_paid": {
+        "type": "DECIMAL(10,2)",
+        "python_type": float,
+        "constraints": ["NOT NULL"],
+        "description": "Amount actually paid"
+    },
+    "payment_status": {
+        "type": "VARCHAR",
+        "python_type": str,
+        "constraints": ["NOT NULL", "ENUM('success','failed')"],
+        "description": "Payment status"
+    },
+    "payment_method": {
+        "type": "VARCHAR",
+        "python_type": str,
+        "constraints": ["NOT NULL", "ENUM('Credit','Debit','Paypal','N/A')"],
+        "description": "Payment method used"
+    },
 }
 
 
