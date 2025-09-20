@@ -1,6 +1,6 @@
 # schema.py
 
-CUSTOMERS_SCHEMA = {
+customers = {
     "customer_id": {
         "type": "INT",
         "python_type": int,
@@ -33,7 +33,7 @@ CUSTOMERS_SCHEMA = {
     },
 }
 
-PRODUCTS_SCHEMA = {
+products = {
     "product_id": {
         "type": "INT",
         "python_type": int,
@@ -54,7 +54,7 @@ PRODUCTS_SCHEMA = {
     },
 }
 
-PLANS_SCHEMA = {
+plans = {
     "plan_id": {
         "type": "INT",
         "python_type": int,
@@ -87,7 +87,7 @@ PLANS_SCHEMA = {
     },
 }
 
-SUBSCRIPTIONS_SCHEMA = {
+subscriptions = {
     "subscription_id": {
         "type": "INT",
         "python_type": int,
@@ -132,7 +132,7 @@ SUBSCRIPTIONS_SCHEMA = {
     },
 }
 
-DISCOUNTS_SCHEMA = {
+discounts = {
     "discount_id": {
         "type": "INT",
         "python_type": int,
@@ -189,7 +189,7 @@ DISCOUNTS_SCHEMA = {
     },
 }
 
-SUBSCRIPTION_DISCOUNTS_SCHEMA = {
+subscription_discounts = {
     "sub_discount_id": {
         "type": "INT",
         "python_type": int,
@@ -222,7 +222,7 @@ SUBSCRIPTION_DISCOUNTS_SCHEMA = {
     },
 }
 
-INVOICES_SCHEMA = {
+invoices = {
     "invoice_id": {
         "type": "INT", 
         "python_type": int, 
@@ -255,7 +255,7 @@ INVOICES_SCHEMA = {
     },
 }
 
-LINE_ITEMS_SCHEMA = {
+line_items = {
     "line_item_id": {
         "type": "INT",
         "python_type": int,
@@ -294,7 +294,7 @@ LINE_ITEMS_SCHEMA = {
     },
 }
 
-PAYMENTS_SCHEMA = {
+payments = {
     "payment_id": {
         "type": "INT",
         "python_type": int,
