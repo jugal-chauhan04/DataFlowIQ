@@ -26,6 +26,11 @@ SUB_DISCOUNT_ID = 401
 MONTHLY_CYCLE_DAYS = 30
 YEARLY_CYCLE_DAYS = 365
 
+# STATIC TABLE  
+STATIC_TABLES = {"plans", "products", "discounts"} 
+
+# DYNAMIC TABLES 
+DYNAMIC_TABLES = {"customers", "subscriptions", "invoices", "payments", "line_items", "subscription_discounts"}
 # DATAFLOWIQ PRODUCTS CATALOG 
 PRODUCTS = [
     {"product_id": 1, "product_name": "AutomateSRC", "product_description": "Workflow automation tool"},

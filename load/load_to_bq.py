@@ -1,6 +1,7 @@
 import pandas as pd
 import logging 
-import time 
+import time
+from extract import config
 from google.cloud import bigquery
 
 
@@ -17,9 +18,28 @@ def load_to_biquery(df, table_name, project_id = "saas-pipeline", dataset = "raw
 
     job_config = bigquery.LoadJobConfig(
         schema = schema,
-        write_disposition = "WRITE_TRUNCATE"
+        create_disposition = "CREATE_NEVER"
     )
-    
+
+    # deciding if to load static tables (products, plans, and discounts) or no 
+    if table_name in config.STATIC_TABLES:
+        # compare row counts
+        query = f"SELECT COUNT(*) AS cnt FROM `{table_id}`"
+        result = list(client.query(query).result())[0]
+        bq_count = result.cnt
+        local_count = len(df)
+        
+        # Checking if a new product / plan / discount has been added, if yes append to existing table
+        if bq_count != local_count:
+            job_config.write_disposition = "WRITE_APPEND"
+            print(f"Updating static table {table_name} from {bq_count} rows to {local_count} rows")
+            
+        # If no change then do not load any data
+        else:
+            print(f"No changes in {table_name}, skipping load")
+            return 0
+    else:
+        job_config.write_disposition = 'WRITE_APPEND'
     
     start_time = time.perf_counter()
     try:
