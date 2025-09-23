@@ -4,7 +4,7 @@ import pandas as pd
 import random
 from datetime import timedelta
 from faker import Faker 
-from config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS, UPGRADE_PROBABILITY, DISCOUNTS, SUB_DISCOUNT_ID, MONTHLY_CYCLE_DAYS, YEARLY_CYCLE_DAYS
+from extract.config import START_DATE, END_DATE, N_CUSTOMERS, N_PLANS, SEED, DOMAIN, PRODUCTS, PLANS, UPGRADE_PROBABILITY, DISCOUNTS, SUB_DISCOUNT_ID, MONTHLY_CYCLE_DAYS, YEARLY_CYCLE_DAYS
 
 fake = Faker()
 
@@ -200,7 +200,12 @@ def generate_discounts() -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame with discount information.
     """
-    return pd.DataFrame(DISCOUNTS)
+    discounts = pd.DataFrame(DISCOUNTS)
+
+    # Forcing data type
+    discounts["valid_from"] = pd.to_datetime(discounts["valid_from"])
+    discounts["valid_to"] = pd.to_datetime(discounts["valid_from"])
+    return discounts
 
 def generate_subscription_discounts(subscriptions, plans, discounts):
     """
@@ -242,7 +247,7 @@ def generate_subscription_discounts(subscriptions, plans, discounts):
     return pd.DataFrame(
         rows,
         columns=[
-            "subscription_discount_id",
+            "sub_discount_id",
             "subscription_id",
             "discount_id",
             "applied_date",

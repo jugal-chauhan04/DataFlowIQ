@@ -14,7 +14,7 @@ N_PLANS = 9
 SEED = 44
 
 # EMAIL DOMAIN
-DOMAIN = "dataflowiq.com"  
+DOMAIN = "srcanalytics.com"  
 
 # UPGRADE PROBABILITY
 UPGRADE_PROBABILITY = 0.40 
@@ -28,9 +28,9 @@ YEARLY_CYCLE_DAYS = 365
 
 # DATAFLOWIQ PRODUCTS CATALOG 
 PRODUCTS = [
-    {"product_id": 1, "product_name": "AutomateIQ", "product_description": "Workflow automation tool"},
-    {"product_id": 2, "product_name": "TeamCollab", "product_description": "Team collaboration platform"},
-    {"product_id": 3, "product_name": "InsightIQ", "product_description": "Business analytics platform"},
+    {"product_id": 1, "product_name": "AutomateSRC", "product_description": "Workflow automation tool"},
+    {"product_id": 2, "product_name": "CollabSRC", "product_description": "Team collaboration platform"},
+    {"product_id": 3, "product_name": "InsightSRC", "product_description": "Business analytics platform"},
 ]
 
 # PLANS

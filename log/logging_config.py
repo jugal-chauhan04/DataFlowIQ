@@ -10,7 +10,7 @@ def setup_logging(log_file = 'pipeline.log'):
         level = logging.INFO,
         format = "%(asctime)s - %(levelname)s - %(message)s",
         handlers = [
-            logging.FileHandler(log_path),
+            logging.FileHandler("pipeline.log"),
             logging.StreamHandler()
         ]
     )
