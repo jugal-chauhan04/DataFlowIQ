@@ -221,3 +221,5 @@ google.api_core.exceptions.BadRequest: 400 POST https://bigquery.googleapis.com/
 2025-09-23 09:46:10,754 - INFO - Starting load for saas-pipeline.raw_src.payments | 25 rows 
 2025-09-23 09:46:13,947 - INFO - Loaded 25 rows into saas-pipeline.raw_src.payments |Duration:  3.19 sec
 2025-09-23 10:21:49,337 - INFO - Logging Initialized
+2025-09-23 10:22:52,438 - INFO - Logging Initialized
+2025-09-23 10:25:34,015 - INFO - Logging Initialized

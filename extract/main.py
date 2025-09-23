@@ -1,5 +1,4 @@
 import pandas as pd
-from extract import schema
 from log.logging_config import setup_logging
 from load.load_to_bq import load_to_biquery
 import warnings
@@ -50,15 +49,15 @@ def main():
     """
 
     # 6. Load to Bigquery (Appends data instead of overwriting)
-    load_to_biquery(customers, "customers", schema.customers_schema)
-    load_to_biquery(products, "products", schema.products_schemaproducts_schema)
-    load_to_biquery(plans, "plans", schema.plans_schemaplans_schema)
-    load_to_biquery(discounts, "discounts", schema.discounts_schemadiscounts_schema)
-    load_to_biquery(subscriptions, "subscriptions", schema.subscriptions_schema)
-    load_to_biquery(subscription_discounts, "subscription_discounts", schema.subscription_discounts_schema)
-    load_to_biquery(invoices, "invoices", schema.invoices_schema)
-    load_to_biquery(line_items, "line_items", schema.line_items_schema)
-    load_to_biquery(payments, "payments", schema.payments_schema)
+    load_to_biquery(customers, "customers")
+    load_to_biquery(products, "products")
+    load_to_biquery(plans, "plans")
+    load_to_biquery(discounts, "discounts")
+    load_to_biquery(subscriptions, "subscriptions")
+    load_to_biquery(subscription_discounts, "subscription_discounts")
+    load_to_biquery(invoices, "invoices")
+    load_to_biquery(line_items, "line_items")
+    load_to_biquery(payments, "payments")
 
     print("Data generation and bigquery load complete")
 

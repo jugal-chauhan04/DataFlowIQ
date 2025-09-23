@@ -1,31 +1,23 @@
 import pandas as pd
 import logging 
 import time 
-from extract import schema 
 from google.cloud import bigquery
 
 
 # Init client
 client = bigquery.Client()
 
-def build_schema(schema_df):
-    """
-    Collects schema that is define in schema.py and returns
-    the arguement for schema that will be passed in 
-    load_to_bigquery function
-    """
-    return [bigquery.SchemaField(**col) for col in schema_df]
-
-
-def load_to_biquery(df, table_name, schema_df, project_id = "saas-pipeline", dataset = "raw_src"):
+def load_to_biquery(df, table_name, project_id = "saas-pipeline", dataset = "raw_src"):
     """
     Appends a pandas DataFrame to bigquery table.
     """
     table_id = f"{project_id}.{dataset}.{table_name}"
+    table = client.get_table(table_id)
+    schema = table.schema
+
     job_config = bigquery.LoadJobConfig(
-        schema = build_schema(schema_df),
-        write_disposition = "WRITE_TRUNCATE",
-        create_disposition = "CREATE_IF_NEEDED"
+        schema = schema,
+        write_disposition = "WRITE_TRUNCATE"
     )
     
     
