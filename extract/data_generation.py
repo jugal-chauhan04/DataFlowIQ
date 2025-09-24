@@ -25,7 +25,7 @@ def generate_email(name: str, domain: str, existing: set) -> str:
     existing.add(email)
     return email 
 
-def generate_customers(n: int = N_CUSTOMERS, domain: str = DOMAIN) -> pd.DataFrame:
+def generate_customers(n: int = N_CUSTOMERS, start_id: int = 1, domain: str = DOMAIN) -> pd.DataFrame:
     """
     Generate a synthetic dataset of customer name, email, address, and payment method
 
@@ -45,7 +45,7 @@ def generate_customers(n: int = N_CUSTOMERS, domain: str = DOMAIN) -> pd.DataFra
         ["Credit", "Debit", "Paypal"], size = n, p = [0.5, 0.3, 0.2]
         )
     customers = pd.DataFrame({
-        "customer_id": range(1, n + 1),
+        "customer_id": range(start_id, start_id + n),
         "customer_name": names,
         "customer_email": emails,
         "customer_address": addresses,
@@ -136,7 +136,7 @@ def choose_new_plan(current_plan, plans):
     
     return None
 
-def generate_subscriptions(customers, plans):
+def generate_subscriptions(customers, plans, start_id=101):
 
     """
     Generate subscription records for each customer.
@@ -149,7 +149,7 @@ def generate_subscriptions(customers, plans):
         pd.DataFrame: Subscriptions dataset
     """
     subscriptions = []
-    sub_id = 101
+    sub_id = start_id
     
     for _, c in customers.iterrows():
         # Assign initial plan + subscription row
@@ -207,7 +207,7 @@ def generate_discounts() -> pd.DataFrame:
     discounts["valid_to"] = pd.to_datetime(discounts["valid_from"])
     return discounts
 
-def generate_subscription_discounts(subscriptions, plans, discounts):
+def generate_subscription_discounts(subscriptions, plans, discounts, start_id = 3001):
     """
     Generate a mapping of subscriptions to applied discounts.
 
@@ -220,7 +220,7 @@ def generate_subscription_discounts(subscriptions, plans, discounts):
         pd.DataFrame: Subscription discounts dataset
     """
     rows = []
-    sub_discount_id = SUB_DISCOUNT_ID
+    sub_discount_id = start_id
     
     # Randomly assign discounts to ~50% of subscriptions
     for _, sub in subscriptions.sample(frac=0.5).iterrows():
@@ -282,7 +282,7 @@ def apply_discounts(line_items, line_item_id, invoice_id, plan, invoice_date, su
                 line_item_id += 1
     return line_item_id
 
-def generate_payments_invoice(subscriptions, plans, discounts, subscription_discounts):
+def generate_payments_invoice(subscriptions, plans, discounts, subscription_discounts, start_invoice_id = 1001, start_pay_id = 5001, start_line_id = 2001):
     """
     Generate invoices, line items, and payments for subscriptions.
 
@@ -296,7 +296,7 @@ def generate_payments_invoice(subscriptions, plans, discounts, subscription_disc
         invoices_df, line_items_df, payments_df
     """
     invoices, line_items, payments = [], [], []
-    invoice_id, line_item_id, payment_id = 1001, 5001, 9001
+    invoice_id, line_item_id, payment_id = start_invoice_id, start_pay_id, start_line_id
 
     for _, sub in subscriptions.iterrows():
         plan = plans[plans.plan_id == sub.plan_id].iloc[0]

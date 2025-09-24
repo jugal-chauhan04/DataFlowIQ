@@ -64,3 +64,17 @@ DISCOUNTS = [
         "is_recurring": False,        # applies only once
     }
 ]
+
+# UNIQUE KEYS
+# config.py
+UNIQUE_KEYS = {
+    "customers": "customer_id",
+    "subscriptions": "subscription_id",
+    "invoices": "invoice_id",
+    "line_items": "line_item_id",
+    "payments": "payment_id",
+    "products": "product_id",
+    "plans": "plan_id",
+    "discounts": "discount_id",
+    "subscription_discounts": "sub_discount_id",
+}

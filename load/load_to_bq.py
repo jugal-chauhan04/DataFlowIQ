@@ -8,6 +8,17 @@ from google.cloud import bigquery
 # Init client
 client = bigquery.Client()
 
+def get_max_id(client, project_id = "saas-pipeline", dataset = "raw_src", table_name):
+    """
+    Fetch max unique id from the bigquery table
+    """
+    id_col = config.UNIQUE_KEYS[table_name]
+    table_id = f"{project_id}.{dataset}.{table_name}"
+
+    query = f"SELECT COALESCE(MAX({id_col}), 0) AS max_id FROM `{table_id}`"
+    result = list(client.query(query).result())[0]
+    return result.max_id
+
 def load_to_biquery(df, table_name, project_id = "saas-pipeline", dataset = "raw_src"):
     """
     Appends a pandas DataFrame to bigquery table.
@@ -31,9 +42,9 @@ def load_to_biquery(df, table_name, project_id = "saas-pipeline", dataset = "raw
         
         # Checking if a new product / plan / discount has been added, if yes append to existing table
         if bq_count != local_count:
-            job_config.write_disposition = "WRITE_APPEND"
+            job_config.write_disposition = "WRITE_TRUNCATE"
             print(f"Updating static table {table_name} from {bq_count} rows to {local_count} rows")
-            
+
         # If no change then do not load any data
         else:
             print(f"No changes in {table_name}, skipping load")

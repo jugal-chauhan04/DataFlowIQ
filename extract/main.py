@@ -1,6 +1,9 @@
 import pandas as pd
+from google.cloud import bigquery
 from log.logging_config import setup_logging
 from load.load_to_bq import load_to_biquery
+from load.load_to_bq import get_max_id
+from extract import schema
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning, module="google.cloud.bigquery")
 from extract.data_generation import (
@@ -13,24 +16,41 @@ from extract.data_generation import (
     generate_payments_invoice,
 )
 
+PROJECT_ID = "saas-pipline"
+DATASET = "raw_src"
+
+client = bigquery.Client(project = PROJECT_ID)
 def main():
     # Setup logging
     setup_logging()
 
     # 1. Generate base data
-    customers = generate_customers(5)
+    max_customer_id = get_max_id(client, "customers")
+    customers = generate_customers(5, start_id = max_customer_id + 1)
     products = generate_products()
     plans = generate_plans()
 
     # 2. Generate subscriptions
-    subscriptions = generate_subscriptions(customers, plans)
+    max_sub_id = get_max_id(client, "subscriptions")
+    subscriptions = generate_subscriptions(customers, plans, start_id = max_sub_id + 1)
 
     # 3. Discounts and applied subscription discounts
+    
     discounts = generate_discounts()
-    subscription_discounts = generate_subscription_discounts(subscriptions, plans, discounts)
+    max_sub_discount_id = get_max_id(client, "subscription_discounts")
+    subscription_discounts = generate_subscription_discounts(subscriptions, plans, discounts, start_id = max_sub_discount_id + 1)
 
     # 4. Invoices, line items, and payments
-    invoices, line_items, payments = generate_payments_invoice(subscriptions, plans, discounts, subscription_discounts)
+    max_invoice_id = get_max_id(client, "invoices")
+    max_pay_id = get_max_id(client, "payments")
+    max_line_id = get_max_id(client, "line_items")
+    invoices, line_items, payments = generate_payments_invoice(subscriptions, 
+                                                               plans, 
+                                                               discounts, 
+                                                               subscription_discounts,
+                                                               start_invoice_id = max_invoice_id + 1,
+                                                               start_pay_id = max_pay_id,
+                                                               start_line_id = max_line_id)
 
     # 5. Store results (CSVs)
     """
