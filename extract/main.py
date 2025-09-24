@@ -16,9 +16,6 @@ from extract.data_generation import (
     generate_payments_invoice,
 )
 
-PROJECT_ID = "saas-pipline"
-DATASET = "raw_src"
-
 client = bigquery.Client()
 def main():
     # Setup logging

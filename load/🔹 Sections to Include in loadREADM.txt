@@ -1,0 +1,91 @@
+🔹 Sections to Include in load/README.md
+
+Introduction
+
+One sentence: “This module handles the Load Phase of the pipeline, moving synthetic SaaS billing data generated in Python into Google BigQuery.”
+
+State the goal: building a reliable, repeatable, append-only load process.
+
+Project Structure
+
+Show files (load_to_bq.py, main.py, config.py, schema.py).
+
+Explain each file’s role briefly.
+
+Schema Handling
+
+We fetch schema directly from BigQuery using client.get_table().schema.
+
+Static vs dynamic tables distinction.
+
+Why: ensures correct types, nullability, and avoids drift between Python and BigQuery.
+
+Static vs Dynamic Tables
+
+Static: plans, products, discounts → reloaded only if config changes.
+
+Dynamic: customers, subscriptions, invoices, payments, line_items, subscription_discounts → always append.
+
+Explain difference in load strategy (WRITE_TRUNCATE vs WRITE_APPEND).
+
+Sequential ID Continuity
+
+Problem: Python generators can re-use IDs if restarted.
+
+Solution: query BigQuery for MAX(id) using COALESCE(MAX(id),0).
+
+New rows start from MAX(id) + 1.
+
+Prevents duplicates and maintains referential integrity across tables.
+
+Mention this applies to all unique keys (customers, subscriptions, invoices, etc.).
+
+Load Logic
+
+How load_table_from_dataframe is used with job_config.
+
+WRITE_APPEND for transactional, WRITE_TRUNCATE for static reloads.
+
+Optional checks (row counts / configs) before reload.
+
+Execution Flow
+
+main.py orchestrates:
+
+Fetch max IDs from BigQuery.
+
+Pass start IDs into generators.
+
+Load DataFrames into BigQuery with correct job config.
+
+Show simplified pseudocode or flow diagram.
+
+Reliability & Reproducibility
+
+Append-only runs → old records stay stable.
+
+Truncate runs → static tables reset cleanly.
+
+Discounts: random assignment is fine for append-only; deterministic hash logic available for reproducibility in full reloads.
+
+Current Setup Example
+
+Document what your current dataset looks like:
+
+15 customers (growing by 5 weekly).
+
+3 products.
+
+9 plans.
+
+Discounts stable.
+
+Shows how the pipeline is being used in practice.
+
+Next Steps
+
+Scheduling with cron or Airflow.
+
+Adding dbt transformations.
+
+Building BI dashboards.

@@ -1,7 +1,7 @@
 import logging
 import os
 
-def setup_logging(log_file = 'pipeline.log'):
+def setup_logging(log_file = 'log/pipeline.log'):
     """
     Configure logging to include timestamps, duration, and messages
     """

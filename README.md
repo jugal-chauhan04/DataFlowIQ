@@ -4,12 +4,12 @@ When I started practicing SaaS metrics (MRR, churn, ARPU, etc.) and data modelin
 
 - Practice building **dbt pipelines** (e.g., MRR, churn, ARPU)
 - Create **interactive dashboards** (Power BI, Tableau, Looker)
-- Stress test data models by scaling from **10 customers → 100k customers**  
+- Stress test data models by scaling from **15 customers → 100k customers**  
 
 
 ## What it does  
 
-Generates a **linked dataset** across customers, products, plans, subscriptions, discounts, invoices, line items, and payments. The end-to-end flow of billing occurs as followed:  
+Generates a **linked dataset** across customers, products, plans, subscriptions, discounts, invoices, line items, and payments and loads it into Google BigQuery. The end-to-end flow of billing occurs as followed:  
 
 1. A customer subscribes to a plan (which belongs to a product).
 2. The subscription produces recurring invoices each billing cycle.
@@ -30,13 +30,13 @@ Config-driven, easy to adjust:
   - Payment failure rates  
 
 
-# About DataFlowIQ
+# About SRC Analytics
 
-DataFlowIQ is a fictional SaaS company that provides a cloud-based productivity suite for small and mid-sized businesses. Its core mission is to help teams automate workflows, analyze performance, and collaborate effectively. They have three products:  
+SRC Analytics is a fictional SaaS company that provides a cloud-based productivity suite for small and mid-sized businesses. Its core mission is to help teams automate workflows, analyze performance, and collaborate effectively. They have three products:  
 
-1. AutomateIQ - Lets users connects apps (Slack, Gmail, Hubspot, Salesforce, etc.) and automate repetitive tasks.
-2. TeamCollab - A project management and team collaboration hub.
-3. InsightIQ - Provides dashboards, data connectors, and reports for sales, marketing, and finance teams.  
+1. AutomateSRC - Lets users connects apps (Slack, Gmail, Hubspot, Salesforce, etc.) and automate repetitive tasks.
+2. CollabSRC - A project management and team collaboration hub.
+3. InsightSRC - Provides dashboards, data connectors, and reports for sales, marketing, and finance teams.  
 
 All three products have three subscription tiers - Free, Pro, and Premium.  
 
@@ -44,30 +44,33 @@ All three products have three subscription tiers - Free, Pro, and Premium.
 ## Schema Design
 
 [The Schema Design is show here](data/schema.md)  
- 
 
-## How to use  
+### Current Setup  
 
-1. Clone the repo  
-2. From the `src/` folder, run:
-   ```bash
-   python main.py  
-3. CSV files will be generated inside /data/
-4. Edit config.py to scale up the dataset or change behaviours  
+At the current configuration, the BigQuery dataset includes:  
+- **15 customers**
+- **3 products**
+- **9 subscription plans** (Free, Pro, Premium across 3 products)
+- **~15–20 subscriptions** (with upgrades/downgrades)
+- **Discounts applied** to ~50% of subscriptions  
+
+This prototype dataset will be used to build **dbt models** that define SaaS metrics such as **MRR, ARR, churn, and ARPU**.  
+These models will feed into **reporting dashboards** (Power BI / Looker) for validation and exploration.  
+
+Static tables (`products`, `plans`, `discounts`) remain unchanged unless manually updated in `config.py`.  
+Transactional tables (`customers`, `subscriptions`, `invoices`, etc.) are append-only, ensuring historical records remain intact.  
 
 
-## Current Configuration  
-
-At the current configuration, the dataset includes:
-- **10 customers.**
-- **3 products.**
-- **9 subscription plans** (Free, Pro, Premium across 3 products).
-- **~15–20 subscriptions** (with upgrades/downgrades).
-- **Discounts applied** to ~50% of subscriptions.
-- **Hundreds of invoices, line items, and payments** depending on subscription length and billing cycles.  
-
-This basic config will allow me to build a dbt pipeline and define metrics like MRR. Then, once that’s stable, I’ll scale it up (10k+ customers, 100k+ invoices) to test the durability and performance of my data models and dashboards.  
-
+### Future Setup
+- Once end-to-end analytics are in place, the project will be scaled to simulate **ongoing data growth**:  
+  - Each weekly run will append *n new customers* and related records.  
+  - The dataset will expand incrementally, enabling longitudinal analysis.  
+- The full pipeline will then be evaluated across all stages:  
+  - **Ingestion pipeline** (data generation & load performance).  
+  - **dbt models** (scalability and maintainability).  
+  - **Metric definitions** (accuracy, validity checks).  
+  - **Dashboard performance** (refresh speed and reliability).  
+- Over time, this will evolve into a **production-style dataset** that demonstrates scalable, reliable analytics workflows.  
 
 ## Key Highlights
 - **Customer lifecycle simulation** → Customers subscribe to plans with randomized start dates, active/cancelled statuses, and end dates.  
@@ -96,8 +99,3 @@ Planned enhancements include:
 ## Ending Note  
 
 This project grew out of the need for a realistic SaaS billing dataset to practice metrics definition and data modeling. It’s small by design today, but fully scalable and I’ll keep expanding it to make it more realistic and useful for SaaS analytics.  
-
-
-
-
-

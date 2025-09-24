@@ -42,7 +42,7 @@ def load_to_biquery(df, table_name, project_id = "saas-pipeline", dataset = "raw
         
         # Checking if a new product / plan / discount has been added, if yes append to existing table
         if bq_count != local_count:
-            job_config.write_disposition = "WRITE_TRUNCATE"
+            job_config.write_disposition = "WRITE_APPEND"
             print(f"Updating static table {table_name} from {bq_count} rows to {local_count} rows")
 
         # If no change then do not load any data
