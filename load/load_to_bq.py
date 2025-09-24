@@ -8,7 +8,7 @@ from google.cloud import bigquery
 # Init client
 client = bigquery.Client()
 
-def get_max_id(client, project_id = "saas-pipeline", dataset = "raw_src", table_name):
+def get_max_id(client, table_name, project_id = "saas-pipeline", dataset = "raw_src"):
     """
     Fetch max unique id from the bigquery table
     """
