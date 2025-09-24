@@ -19,7 +19,7 @@ from extract.data_generation import (
 PROJECT_ID = "saas-pipline"
 DATASET = "raw_src"
 
-client = bigquery.Client(project = PROJECT_ID)
+client = bigquery.Client()
 def main():
     # Setup logging
     setup_logging()
