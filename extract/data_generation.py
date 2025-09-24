@@ -136,7 +136,7 @@ def choose_new_plan(current_plan, plans):
     
     return None
 
-def generate_subscriptions(customers, plans, start_id=101):
+def generate_subscriptions(customers, plans, start_id=100):
 
     """
     Generate subscription records for each customer.
@@ -207,7 +207,7 @@ def generate_discounts() -> pd.DataFrame:
     discounts["valid_to"] = pd.to_datetime(discounts["valid_from"])
     return discounts
 
-def generate_subscription_discounts(subscriptions, plans, discounts, start_id = 3001):
+def generate_subscription_discounts(subscriptions, plans, discounts, start_id = 3000):
     """
     Generate a mapping of subscriptions to applied discounts.
 
@@ -282,7 +282,7 @@ def apply_discounts(line_items, line_item_id, invoice_id, plan, invoice_date, su
                 line_item_id += 1
     return line_item_id
 
-def generate_payments_invoice(subscriptions, plans, discounts, subscription_discounts, start_invoice_id = 1001, start_pay_id = 5001, start_line_id = 2001):
+def generate_payments_invoice(subscriptions, plans, discounts, subscription_discounts, start_invoice_id = 1000, start_pay_id = 5000, start_line_id = 2000):
     """
     Generate invoices, line items, and payments for subscriptions.
 

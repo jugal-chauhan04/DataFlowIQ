@@ -50,7 +50,7 @@ def load_to_biquery(df, table_name, project_id = "saas-pipeline", dataset = "raw
             print(f"No changes in {table_name}, skipping load")
             return 0
     else:
-        job_config.write_disposition = 'WRITE_APPEND'
+        job_config.write_disposition = 'WRITE_TRUNCATE'
     
     start_time = time.perf_counter()
     try:
