@@ -113,9 +113,7 @@ The surrogate key approach provides a **reliable, production-style solution** fo
 
 ### 4. Execution Flow  
 
-The pipeline is orchestrated through `main.py`, handling **static** and **dynamic** tables differently.
-
-## Execution Flow
+The pipeline is orchestrated through `main.py`, handling **static** and **dynamic** tables differently.  
 
 ```mermaid
 flowchart TD
@@ -133,73 +131,45 @@ flowchart TD
     F --> G["Append tables to bigquery dataset"]
     G --> H[End]
 ```   
+#### Pipeline Guarantees
+- **Idempotent behavior** → running the same load twice will not corrupt data.  
+- **Referential integrity** → all relationships between tables remain valid.  
+- **Incremental growth** → each run expands the dataset without rewriting history.  
+- **Scalability** → approach is designed to handle ongoing weekly growth.  
 
 
-## Current Setup Example
+### 5. Current Setup Example
 
-The dataset currently contains the following entities:
+The current BigQuery dataset contains the following tables:
 
-- **15 customers** (growing by ~5 per weekly run)  
-- **3 products** (static, config-defined)  
-- **9 plans** (static, config-defined)  
-- **~15–20 subscriptions** (with upgrades/downgrades)  
-- **Invoices, payments, and line_items** scaling with subscriptions  
-- **Discounts** applied to ~50% of subscriptions  
+| Table Name              | Type          | Current Size | Growth Pattern              |
+|--------------------------|---------------|--------------|-----------------------------|
+| customers               | Dynamic       | 15 rows      | +5 rows per weekly run      |
+| subscriptions           | Dynamic       | ~15–20 rows  | Scales with customers       |
+| invoices                | Dynamic       | ~15–20 rows  | Scales with subscriptions   |
+| payments                | Dynamic       | ~15–20 rows  | Scales with invoices        |
+| line_items              | Dynamic       | ~15–20 rows  | Scales with invoices        |
+| subscription_discounts  | Dynamic       | ~7–10 rows   | ~50% of subscriptions       |
+| products                | Static        | 3 rows       | Config-defined              |
+| plans                   | Static        | 9 rows       | Config-defined              |
+| discounts               | Static        | 3 rows       | Config-defined              |  
 
-### Entity-Relationship Diagram
+This foundation will power the next phases:
+- **dbt models** to define metrics like MRR and ARR.  
+- **BI dashboards** (Power BI, Looker, or Sigma) to visualize revenue trends.  
+- **Scheduled runs using airflow or other scheduler** to simulate continuous SaaS operations.  
 
-### Entity-Relationship Diagram
+---
 
-### Entity-Relationship Diagram
+### 6. Closing Note
 
-```mermaid
-erDiagram
-    customers {
-        int customer_id PK
-        string customer_email
-    }
-    subscriptions {
-        int subscription_id PK
-        int customer_id FK
-        int plan_id FK
-    }
-    invoices {
-        int invoice_id PK
-        int subscription_id FK
-    }
-    payments {
-        int payment_id PK
-        int invoice_id FK
-    }
-    line_items {
-        int line_item_id PK
-        int invoice_id FK
-    }
-    subscription_discounts {
-        int sub_discount_id PK
-        int subscription_id FK
-        int discount_id FK
-    }
-    products {
-        int product_id PK
-    }
-    plans {
-        int plan_id PK
-        int product_id FK
-    }
-    discounts {
-        int discount_id PK
-    }
+This project currently covers the **Extract** (synthetic data generation) and **Load** (BigQuery pipeline) phases of the ELT lifecycle.  
+The next milestones are to implement the **Transform** phase with dbt (defining SaaS revenue metrics such as MRR, ARR, and churn) and to build **interactive dashboards** in Power BI / Looker / Sigma for real-time analytics.  
 
-    customers ||--o{ subscriptions : "has"
-    subscriptions ||--o{ invoices : "generates"
-    invoices ||--o{ payments : "records"
-    invoices ||--o{ line_items : "contains"
-    subscriptions ||--o{ subscription_discounts : "applies"
-    products ||--o{ plans : "offers"
-    plans ||--o{ subscriptions : "defines"
-    discounts ||--o{ subscription_discounts : "defines"
-```
+By combining data generation, a reliable append-only pipeline, warehouse modeling, and BI visualization, the goal is to simulate the full lifecycle of a SaaS analytics platform — from raw events to business-ready insights.
+
+
+
 
 
 

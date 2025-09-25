@@ -45,6 +45,57 @@ All three products have three subscription tiers - Free, Pro, and Premium.
 
 [The Schema Design is show here](data/schema.md)  
 
+### Entity-Relationship Diagram
+
+```mermaid
+erDiagram
+    customers {
+        int customer_id PK
+        string customer_email
+    }
+    subscriptions {
+        int subscription_id PK
+        int customer_id FK
+        int plan_id FK
+    }
+    invoices {
+        int invoice_id PK
+        int subscription_id FK
+    }
+    payments {
+        int payment_id PK
+        int invoice_id FK
+    }
+    line_items {
+        int line_item_id PK
+        int invoice_id FK
+    }
+    subscription_discounts {
+        int sub_discount_id PK
+        int subscription_id FK
+        int discount_id FK
+    }
+    products {
+        int product_id PK
+    }
+    plans {
+        int plan_id PK
+        int product_id FK
+    }
+    discounts {
+        int discount_id PK
+    }
+
+    customers ||--o{ subscriptions : "has"
+    subscriptions ||--o{ invoices : "generates"
+    invoices ||--o{ payments : "records"
+    invoices ||--o{ line_items : "contains"
+    subscriptions ||--o{ subscription_discounts : "applies"
+    products ||--o{ plans : "offers"
+    plans ||--o{ subscriptions : "defines"
+    discounts ||--o{ subscription_discounts : "defines"
+```
+
 ### Current Setup  
 
 At the current configuration, the BigQuery dataset includes:  
