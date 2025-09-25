@@ -132,7 +132,21 @@ flowchart TD
 
     F --> G["Append tables to bigquery dataset"]
     G --> H[End]
+```   
+
+
+```mermaid
+erDiagram
+    customers ||--o{ subscriptions : has
+    subscriptions ||--o{ invoices : generates
+    invoices ||--o{ payments : includes
+    invoices ||--o{ line_items : contains
+    subscriptions ||--o{ subscription_discounts : applies
+    products ||--o{ plans : offers
+    plans ||--o{ subscriptions : defines
+    discounts ||--o{ subscription_discounts : defines
 ```
+
 
 
 
