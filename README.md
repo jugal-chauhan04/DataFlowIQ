@@ -145,7 +145,14 @@ Planned enhancements include:
 - Proration for mid-cycle plan changes.  
 - Multi-currency and tax support. 
 - Usage-based billing models.  
-- Revenue recognition (invoiced vs recognized revenue).  
+- Revenue recognition (invoiced vs recognized revenue).
+
+## Coming Next
+The next phase will document the **Load process** into BigQuery, including:
+- Append-only loads
+- Surrogate keys
+- Static vs dynamic table handling
+- Weekly incremental growth
 
 ## Ending Note  
 
