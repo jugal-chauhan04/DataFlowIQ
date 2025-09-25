@@ -150,6 +150,8 @@ The dataset currently contains the following entities:
 
 ### Entity-Relationship Diagram
 
+### Entity-Relationship Diagram
+
 ```mermaid
 erDiagram
     customers {
@@ -197,24 +199,8 @@ erDiagram
     products ||--o{ plans : "offers"
     plans ||--o{ subscriptions : "defines"
     discounts ||--o{ subscription_discounts : "defines"
-
-    %% Style dynamic tables (light pastel blue)
-    style customers fill:#E6F2FA,stroke:#154360,stroke-width:2px
-    style subscriptions fill:#E6F2FA,stroke:#154360,stroke-width:2px
-    style invoices fill:#E6F2FA,stroke:#154360,stroke-width:2px
-    style payments fill:#E6F2FA,stroke:#154360,stroke-width:2px
-    style line_items fill:#E6F2FA,stroke:#154360,stroke-width:2px
-    style subscription_discounts fill:#E6F2FA,stroke:#154360,stroke-width:2px
-
-    %% Style static tables (light pastel green)
-    style products fill:#E9F7EF,stroke:#145A32,stroke-width:2px
-    style plans fill:#E9F7EF,stroke:#145A32,stroke-width:2px
-    style discounts fill:#E9F7EF,stroke:#145A32,stroke-width:2px
 ```
 
-### Legend
-- 🟦 **Light Pastel Blue** → Dynamic tables (append-only, grow weekly)  
-- 🟩 **Light Pastel Green** → Static tables (config-defined, rarely change)  
 
 
 
