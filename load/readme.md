@@ -137,16 +137,65 @@ flowchart TD
 
 ```mermaid
 erDiagram
-    customers ||--o{ subscriptions : has
-    subscriptions ||--o{ invoices : generates
-    invoices ||--o{ payments : includes
-    invoices ||--o{ line_items : contains
-    subscriptions ||--o{ subscription_discounts : applies
-    products ||--o{ plans : offers
-    plans ||--o{ subscriptions : defines
-    discounts ||--o{ subscription_discounts : defines
-```
+    customers {
+        int customer_id PK
+        string customer_email
+    }
+    subscriptions {
+        int subscription_id PK
+        int customer_id FK
+        int plan_id FK
+    }
+    invoices {
+        int invoice_id PK
+        int subscription_id FK
+    }
+    payments {
+        int payment_id PK
+        int invoice_id FK
+    }
+    line_items {
+        int line_item_id PK
+        int invoice_id FK
+    }
+    subscription_discounts {
+        int sub_discount_id PK
+        int subscription_id FK
+        int discount_id FK
+    }
+    products {
+        int product_id PK
+    }
+    plans {
+        int plan_id PK
+        int product_id FK
+    }
+    discounts {
+        int discount_id PK
+    }
 
+    customers ||--o{ subscriptions : "1-to-many (+5 weekly)"
+    subscriptions ||--o{ invoices : "1-to-many"
+    invoices ||--o{ payments : "1-to-many"
+    invoices ||--o{ line_items : "1-to-many"
+    subscriptions ||--o{ subscription_discounts : "optional"
+    products ||--o{ plans : "1-to-many"
+    plans ||--o{ subscriptions : "1-to-many"
+    discounts ||--o{ subscription_discounts : "optional"
+
+    %% Style dynamic tables (blue)
+    style customers fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
+    style subscriptions fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
+    style invoices fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
+    style payments fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
+    style line_items fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
+    style subscription_discounts fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
+
+    %% Style static tables (orange)
+    style products fill:#FAD7A0,stroke:#7D6608,stroke-width:2px
+    style plans fill:#FAD7A0,stroke:#7D6608,stroke-width:2px
+    style discounts fill:#FAD7A0,stroke:#7D6608,stroke-width:2px
+```
 
 
 
