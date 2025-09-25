@@ -121,14 +121,14 @@ flowchart TD
 
     %% Static tables branch
     B --> C{"Static tables: plans, products, discounts?"}
-    C -->|Yes| D[Check if new entities in config.py]
-    D -->|No new entities| E[Skip load]
-    D -->|New entities| F[Generate rows with surrogate keys]
-    F --> G[Append to BigQuery (WRITE_APPEND)]
+    C -->|Yes| D["Check if new entities in config.py"]
+    D -->|No new entities| E["Skip load"]
+    D -->|New entities| F["Generate rows with surrogate keys"]
+    F --> G["Append to BigQuery - WRITE_APPEND"]
 
     %% Dynamic tables branch
-    C -->|No| H[Generate new rows using start_id = MAX(id)+1]
-    H --> I[Append to BigQuery (WRITE_APPEND)]
+    C -->|No| H["Generate new rows using start_id = MAX(id)+1"]
+    H --> I["Append to BigQuery - WRITE_APPEND"]
 
     G & I --> J[End]
 ```
