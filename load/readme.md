@@ -148,6 +148,8 @@ The dataset currently contains the following entities:
 
 ### Entity-Relationship Diagram
 
+### Entity-Relationship Diagram
+
 ```mermaid
 erDiagram
     customers {
@@ -196,23 +198,24 @@ erDiagram
     plans ||--o{ subscriptions : "defines"
     discounts ||--o{ subscription_discounts : "defines"
 
-    %% Style dynamic tables (pastel blue)
-    style customers fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
-    style subscriptions fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
-    style invoices fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
-    style payments fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
-    style line_items fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
-    style subscription_discounts fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
+    %% Style dynamic tables (light pastel blue)
+    style customers fill:#E6F2FA,stroke:#154360,stroke-width:2px
+    style subscriptions fill:#E6F2FA,stroke:#154360,stroke-width:2px
+    style invoices fill:#E6F2FA,stroke:#154360,stroke-width:2px
+    style payments fill:#E6F2FA,stroke:#154360,stroke-width:2px
+    style line_items fill:#E6F2FA,stroke:#154360,stroke-width:2px
+    style subscription_discounts fill:#E6F2FA,stroke:#154360,stroke-width:2px
 
-    %% Style static tables (pastel green)
-    style products fill:#A9DFBF,stroke:#1D8348,stroke-width:2px
-    style plans fill:#A9DFBF,stroke:#1D8348,stroke-width:2px
-    style discounts fill:#A9DFBF,stroke:#1D8348,stroke-width:2px
+    %% Style static tables (light pastel green)
+    style products fill:#E9F7EF,stroke:#145A32,stroke-width:2px
+    style plans fill:#E9F7EF,stroke:#145A32,stroke-width:2px
+    style discounts fill:#E9F7EF,stroke:#145A32,stroke-width:2px
 ```
 
 ### Legend
-- 🟦 **Pastel Blue** → Dynamic tables (append-only, grow weekly)  
-- 🟩 **Pastel Green** → Static tables (config-defined, rarely change)  
+- 🟦 **Light Pastel Blue** → Dynamic tables (append-only, grow weekly)  
+- 🟩 **Light Pastel Green** → Static tables (config-defined, rarely change)  
+
 
 
 
