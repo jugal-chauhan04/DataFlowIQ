@@ -123,17 +123,15 @@ flowchart TD
 
     %% Branch for static table changes
     B --> C{"Change in Static tables: plans, products, discounts?"}
-    C -->|Yes| D["Append static tables: plans, products, discounts"]
+    C -->|Yes| D["Append static tables: plans, products, discounts along with dynamic tables"]
     C -->|No| E["Skip static tables, Only append dynamic tables"]
 
     %% Both paths lead to dynamic
     D --> F["Generate new rows using start_id = MAX(id)+1"]
     E --> F
 
-    F --> G["Append dynamic tables customers, subscriptions, invoices, etc."]
+    F --> G["Append tables to bigquery dataset"]
     G --> H[End]
-```
-
 ```
 
 
