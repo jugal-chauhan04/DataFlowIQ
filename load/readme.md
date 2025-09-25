@@ -120,7 +120,7 @@ flowchart TD
     A[Start: main.py] --> B[Fetch max IDs from BigQuery]
 
     %% Static tables branch
-    B --> C{Static tables (plans, products, discounts)?}
+    B --> C{"Static tables: plans, products, discounts?"}
     C -->|Yes| D[Check if new entities in config.py]
     D -->|No new entities| E[Skip load]
     D -->|New entities| F[Generate rows with surrogate keys]
