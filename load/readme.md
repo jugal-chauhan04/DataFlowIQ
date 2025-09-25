@@ -135,6 +135,19 @@ flowchart TD
 ```   
 
 
+## Current Setup Example
+
+The dataset currently contains the following entities:
+
+- **15 customers** (growing by ~5 per weekly run)  
+- **3 products** (static, config-defined)  
+- **9 plans** (static, config-defined)  
+- **~15–20 subscriptions** (with upgrades/downgrades)  
+- **Invoices, payments, and line_items** scaling with subscriptions  
+- **Discounts** applied to ~50% of subscriptions  
+
+### Entity-Relationship Diagram
+
 ```mermaid
 erDiagram
     customers {
@@ -174,28 +187,33 @@ erDiagram
         int discount_id PK
     }
 
-    customers ||--o{ subscriptions : "1-to-many (+5 weekly)"
-    subscriptions ||--o{ invoices : "1-to-many"
-    invoices ||--o{ payments : "1-to-many"
-    invoices ||--o{ line_items : "1-to-many"
-    subscriptions ||--o{ subscription_discounts : "optional"
-    products ||--o{ plans : "1-to-many"
-    plans ||--o{ subscriptions : "1-to-many"
-    discounts ||--o{ subscription_discounts : "optional"
+    customers ||--o{ subscriptions : "has"
+    subscriptions ||--o{ invoices : "generates"
+    invoices ||--o{ payments : "records"
+    invoices ||--o{ line_items : "contains"
+    subscriptions ||--o{ subscription_discounts : "applies"
+    products ||--o{ plans : "offers"
+    plans ||--o{ subscriptions : "defines"
+    discounts ||--o{ subscription_discounts : "defines"
 
-    %% Style dynamic tables (blue)
-    style customers fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
-    style subscriptions fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
-    style invoices fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
-    style payments fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
-    style line_items fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
-    style subscription_discounts fill:#D6EAF8,stroke:#1B4F72,stroke-width:2px
+    %% Style dynamic tables (pastel blue)
+    style customers fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
+    style subscriptions fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
+    style invoices fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
+    style payments fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
+    style line_items fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
+    style subscription_discounts fill:#AED6F1,stroke:#2E86C1,stroke-width:2px
 
-    %% Style static tables (orange)
-    style products fill:#FAD7A0,stroke:#7D6608,stroke-width:2px
-    style plans fill:#FAD7A0,stroke:#7D6608,stroke-width:2px
-    style discounts fill:#FAD7A0,stroke:#7D6608,stroke-width:2px
+    %% Style static tables (pastel green)
+    style products fill:#A9DFBF,stroke:#1D8348,stroke-width:2px
+    style plans fill:#A9DFBF,stroke:#1D8348,stroke-width:2px
+    style discounts fill:#A9DFBF,stroke:#1D8348,stroke-width:2px
 ```
+
+### Legend
+- 🟦 **Pastel Blue** → Dynamic tables (append-only, grow weekly)  
+- 🟩 **Pastel Green** → Static tables (config-defined, rarely change)  
+
 
 
 
