@@ -43,9 +43,11 @@ All three products have three subscription tiers - Free, Pro, and Premium.
 
 ## Schema Design
 
-[The Schema Design is show here](data/schema.md)  
+[The entire Schema Design is shown here](data/schema.md)  
 
-### Entity-Relationship Diagram
+### Entity-Relationship Diagram  
+
+![ER Diagram](<Untitled diagram _ Mermaid Chart-2025-09-25-160352.png>)
 
 ```mermaid
 erDiagram
@@ -145,7 +147,7 @@ Planned enhancements include:
 - Proration for mid-cycle plan changes.  
 - Multi-currency and tax support. 
 - Usage-based billing models.  
-- Revenue recognition (invoiced vs recognized revenue).
+- Revenue recognition (invoiced vs recognized revenue).  
 
 ## Coming Next
 The next phase will document the **Load process** into BigQuery, including:
