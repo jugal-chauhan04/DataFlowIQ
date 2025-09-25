@@ -115,22 +115,25 @@ The surrogate key approach provides a **reliable, production-style solution** fo
 
 The pipeline is orchestrated through `main.py`, handling **static** and **dynamic** tables differently.
 
+## Execution Flow
+
 ```mermaid
 flowchart TD
     A[Start: main.py] --> B[Fetch max IDs from BigQuery]
 
-    %% Static tables branch
-    B --> C{"Static tables: plans, products, discounts?"}
-    C -->|Yes| D["Check if new entities in config.py"]
-    D -->|No new entities| E["Skip load"]
-    D -->|New entities| F["Generate rows with surrogate keys"]
-    F --> G["Append to BigQuery - WRITE_APPEND"]
+    %% Branch for static table changes
+    B --> C{"Change in Static tables: plans, products, discounts?"}
+    C -->|Yes| D["Append static tables: plans, products, discounts"]
+    C -->|No| E["Skip static tables, Only append dynamic tables"]
 
-    %% Dynamic tables branch
-    C -->|No| H["Generate new rows using start_id = MAX(id)+1"]
-    H --> I["Append to BigQuery - WRITE_APPEND"]
+    %% Both paths lead to dynamic
+    D --> F["Generate new rows using start_id = MAX(id)+1"]
+    E --> F
 
-    G & I --> J[End]
+    F --> G["Append dynamic tables customers, subscriptions, invoices, etc."]
+    G --> H[End]
+```
+
 ```
 
 
