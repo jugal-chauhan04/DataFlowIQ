@@ -40,12 +40,8 @@ SRC Analytics is a fictional SaaS company that provides a cloud-based productivi
 
 All three products have three subscription tiers - Free, Pro, and Premium.  
 
-
-## Schema Design
-
-the schema design is outline in the schema.md file, meanwhile, the ER diagram showcases the relationship among tables.  
-
-### Entity-Relationship Diagram  
+## Schema Design  
+The schema design is outline in the schema.md file, meanwhile, the ER diagram showcases the relationship among tables.  
 
 ![ER Diagram](<Untitled diagram _ Mermaid Chart-2025-09-25-160352.png>)
 
@@ -114,8 +110,6 @@ These models will feed into **reporting dashboards** (Power BI / Looker) for val
 
 Static tables (`products`, `plans`, `discounts`) remain unchanged unless manually updated in `config.py`.  
 Transactional tables (`customers`, `subscriptions`, `invoices`, etc.) are append-only, ensuring historical records remain intact.  
-
-
 ### Future Setup
 - Once end-to-end analytics are in place, the project will be scaled to simulate **ongoing data growth**:  
   - Each weekly run will append *n new customers* and related records.  
@@ -136,8 +130,6 @@ Transactional tables (`customers`, `subscriptions`, `invoices`, etc.) are append
 - **Payments** → Simulated payments for each invoice, with configurable failure probability (e.g., 30% fail, 70% success).  
 - **Config-driven** → Dates, upgrade probabilities, and failure rates are controlled in `config.py` for easy tuning.  
 - **Relational schema** → All tables are linked via foreign keys (e.g., customers → subscriptions → invoices → payments).  
-  
-
 ## Limitations and Future Enhancements  
 
 This project currently simplifies some aspects of SaaS billing.
