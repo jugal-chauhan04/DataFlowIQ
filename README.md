@@ -43,7 +43,7 @@ All three products have three subscription tiers - Free, Pro, and Premium.
 
 ## Schema Design
 
-[The entire Schema Design is shown here](data/schema.md)  
+the schema design is outline in the schema.md file, meanwhile, the ER diagram showcases the relationship among tables.  
 
 ### Entity-Relationship Diagram  
 
