@@ -60,7 +60,9 @@
 | subscription_id          | INT             | int                | FOREIGN KEY REFERENCES subscriptions(subscription_id), NOT NULL           | The subscription this discount is applied to                |
 | discount_id              | INT             | int                | FOREIGN KEY REFERENCES discounts(discount_id), NOT NULL                   | The discount applied to the subscription                    |
 | applied_date             | DATE            | datetime.date      | NOT NULL                                                                  | Date when discount was applied (usually subscription start) |
-| expiry_date              | DATE            | datetime.date      | NULLABLE                                                                  | Date when discount expired (usually subscription end date)  |
+| expiry_date              | DATE            | datetime.date      | NULLABLE                                                                  | Date when discount expired (usually subscription end date)  |  
+
+
 
 
 ## Invoices Table
