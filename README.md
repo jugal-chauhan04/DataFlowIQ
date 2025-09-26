@@ -49,6 +49,7 @@ All three products have three subscription tiers - Free, Pro, and Premium.
 
 ![ER Diagram](<Untitled diagram _ Mermaid Chart-2025-09-25-160352.png>)
 
+<!--
 ```mermaid
 erDiagram
     customers {
@@ -97,6 +98,7 @@ erDiagram
     plans ||--o{ subscriptions : "defines"
     discounts ||--o{ subscription_discounts : "defines"
 ```
+-->  
 
 ### Current Setup  
 
