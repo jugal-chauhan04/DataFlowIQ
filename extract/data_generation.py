@@ -333,7 +333,7 @@ def generate_payments_invoice(subscriptions, plans, discounts, subscription_disc
                 invoices.append([invoice_id, sub.subscription_id, invoice_date, 0.0, "paid"])
                 payments.append([payment_id, invoice_id, invoice_date + timedelta(days=1), 0.0, "success", "N/A"])
             else:
-                status = np.random.choice(["success", "failed"], p=[0.7, 0.3])
+                status = np.random.choice(["success", "failed", "pending"], p=[0.7, 0.2, 0.1])
                 amount_paid = total if status == "success" else 0
                 payments.append([
                     payment_id,
@@ -343,11 +343,50 @@ def generate_payments_invoice(subscriptions, plans, discounts, subscription_disc
                     status,
                     np.random.choice(["Debit", "Credit", "Paypal"]),
                 ])
-                invoice_status = "paid" if status == "success" else "pending"
-                invoices.append([invoice_id, sub.subscription_id, invoice_date, total, invoice_status])
+            payment_id += 1
+
+            # Retry if payment failed or pending  
+            retries = 0
+            last_status = status
+            last_date = invoice_date + timedelta(days=1)
+            while last_status in ["failed", "pending"] and retries < 2:
+                delay = np.random.randint(2,8) #retry after 2-7 days
+                retry_date = last_date + timedelta(days=delay)
+                retry_status = np.random.choice(["success", "failed", "pending"], p=[0.7, 0.2, 0.1])
+                amount_paid = total if retry_status == 'success' else 0
+
+                payments.append([
+                    payment_id,
+                    invoice_id,
+                    retry_date,
+                    amount_paid,
+                    retry_status,
+                    np.random.choice(["Debit", "Credit", "Paypal"])
+                ])
+                payment_id += 1 
+
+                last_status = retry_status
+                last_date = retry_date
+                retries += 1
+
+                if last_status == 'success':
+                    break
+            
+            # Final invoice status after retries
+            if last_status == 'success':
+                invoice_status = "paid"
+            else:
+                invoice_status = "past_due"
+            
+            invoices.append([
+                invoice_id,
+                sub.subscription_id,
+                invoice_date,
+                total,
+                invoice_status
+            ])
 
             # Increment counters
-            payment_id += 1
             invoice_id += 1
             cycle_number += 1
 

@@ -1,336 +1,74 @@
 # schema.py
+from google.cloud import bigquery
 
-customers_schema = {
-    "customer_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["PRIMARY KEY", "NOT NULL"],
-        "description": "Unique ID for each customer",
-    },
-    "customer_name": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL"],
-        "description": "Full name of the customer",
-    },
-    "customer_email": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["UNIQUE", "NOT NULL"],
-        "description": "Unique email address for each customer",
-    },
-    "customer_address": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NULLABLE"],
-        "description": "Mailing address (synthetic from Faker)",
-    },
-    "payment_method": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL", "ENUM('Credit','Debit','Paypal')"],
-        "description": "Preferred payment method",
-    },
+schemas = {
+    "customers": [
+        bigquery.SchemaField("customer_id", "INTEGER", mode="REQUIRED", description="Unique ID for each customer"),
+        bigquery.SchemaField("customer_name", "STRING", mode="REQUIRED", description="Full name of the customer"),
+        bigquery.SchemaField("customer_email", "STRING", mode="REQUIRED", description="Unique email address for each customer"),
+        bigquery.SchemaField("customer_address", "STRING", mode="NULLABLE", description="Mailing address (synthetic from Faker)"),
+        bigquery.SchemaField("payment_method", "STRING", mode="REQUIRED", description="Preferred payment method"),
+    ],
+    "products": [
+        bigquery.SchemaField("product_id", "INTEGER", mode="REQUIRED", description="Unique ID for each product"),
+        bigquery.SchemaField("product_name", "STRING", mode="REQUIRED", description="Name of the product"),
+        bigquery.SchemaField("product_description", "STRING", mode="REQUIRED", description="Short description of the product"),
+    ],
+    "plans": [
+        bigquery.SchemaField("plan_id", "INTEGER", mode="REQUIRED", description="Unique ID for each plan"),
+        bigquery.SchemaField("product_id", "INTEGER", mode="REQUIRED", description="ID of the product this plan belongs to"),
+        bigquery.SchemaField("plan_name", "STRING", mode="REQUIRED", description="Name of the plan (e.g., Free, Pro, Premium)"),
+        bigquery.SchemaField("plan_price", "FLOAT", mode="REQUIRED", description="Price of the plan"),
+        bigquery.SchemaField("recurring", "STRING", mode="REQUIRED", description="Billing frequency of the plan"),
+    ],
+    "subscriptions": [
+        bigquery.SchemaField("subscription_id", "INTEGER", mode="REQUIRED", description="Unique ID for each subscription record"),
+        bigquery.SchemaField("customer_id", "INTEGER", mode="REQUIRED", description="The customer associated with this subscription"),
+        bigquery.SchemaField("plan_id", "INTEGER", mode="REQUIRED", description="The plan this subscription belongs to"),
+        bigquery.SchemaField("start_date", "DATE", mode="REQUIRED", description="Date when the subscription started"),
+        bigquery.SchemaField("end_date", "DATE", mode="NULLABLE", description="Date when the subscription ended"),
+        bigquery.SchemaField("status", "STRING", mode="REQUIRED", description="Current status of the subscription"),
+        bigquery.SchemaField("cancel_date", "DATE", mode="NULLABLE", description="Date when the subscription was cancelled"),
+    ],
+    "discounts": [
+        bigquery.SchemaField("discount_id", "INTEGER", mode="REQUIRED", description="Unique ID for each discount or coupon"),
+        bigquery.SchemaField("discount_code", "STRING", mode="REQUIRED", description="Code entered by customer to apply discount"),
+        bigquery.SchemaField("discount_type", "STRING", mode="REQUIRED", description="Type of discount: percentage or fixed amount"),
+        bigquery.SchemaField("discount_value", "FLOAT", mode="REQUIRED", description="Value of the discount (percent or fixed amount)"),
+        bigquery.SchemaField("valid_from", "DATE", mode="REQUIRED", description="Start date when discount is valid"),
+        bigquery.SchemaField("valid_to", "DATE", mode="REQUIRED", description="End date when discount expires"),
+        bigquery.SchemaField("product_id", "INTEGER", mode="NULLABLE", description="Product the discount applies to"),
+        bigquery.SchemaField("plan_id", "INTEGER", mode="NULLABLE", description="Plan the discount applies to"),
+        bigquery.SchemaField("is_recurring", "BOOLEAN", mode="REQUIRED", description="Whether the discount applies on every billing cycle"),
+    ],
+    "subscription_discounts": [
+        bigquery.SchemaField("sub_discount_id", "INTEGER", mode="REQUIRED", description="Unique ID for each subscription-discount relationship"),
+        bigquery.SchemaField("subscription_id", "INTEGER", mode="REQUIRED", description="The subscription this discount is applied to"),
+        bigquery.SchemaField("discount_id", "INTEGER", mode="REQUIRED", description="The discount applied to the subscription"),
+        bigquery.SchemaField("applied_date", "DATE", mode="REQUIRED", description="Date when discount was applied"),
+        bigquery.SchemaField("expiry_date", "DATE", mode="NULLABLE", description="Date when discount expired"),
+    ],
+    "invoices": [
+        bigquery.SchemaField("invoice_id", "INTEGER", mode="REQUIRED", description="Unique invoice ID"),
+        bigquery.SchemaField("subscription_id", "INTEGER", mode="REQUIRED", description="The subscription associated with this invoice"),
+        bigquery.SchemaField("invoice_date", "DATE", mode="REQUIRED", description="Date of the invoice"),
+        bigquery.SchemaField("total_due", "FLOAT", mode="REQUIRED", description="Total amount due for the invoice"),
+        bigquery.SchemaField("invoice_status", "STRING", mode="REQUIRED", description="Invoice payment status"),
+    ],
+    "line_items": [
+        bigquery.SchemaField("line_item_id", "INTEGER", mode="REQUIRED", description="Unique line item ID"),
+        bigquery.SchemaField("invoice_id", "INTEGER", mode="REQUIRED", description="Invoice associated with this line item"),
+        bigquery.SchemaField("plan_id", "INTEGER", mode="NULLABLE", description="Plan ID (NULL for discounts)"),
+        bigquery.SchemaField("description", "STRING", mode="REQUIRED", description="Description of the line item"),
+        bigquery.SchemaField("amount", "FLOAT", mode="REQUIRED", description="Amount for this line item"),
+        bigquery.SchemaField("line_type", "STRING", mode="REQUIRED", description="Type of line item"),
+    ],
+    "payments": [
+        bigquery.SchemaField("payment_id", "INTEGER", mode="REQUIRED", description="Unique payment ID"),
+        bigquery.SchemaField("invoice_id", "INTEGER", mode="REQUIRED", description="Invoice associated with the payment"),
+        bigquery.SchemaField("payment_date", "DATE", mode="REQUIRED", description="Date of payment attempt"),
+        bigquery.SchemaField("amount_paid", "FLOAT", mode="REQUIRED", description="Amount actually paid"),
+        bigquery.SchemaField("payment_status", "STRING", mode="REQUIRED", description="payment status"),
+        bigquery.SchemaField("payment_method", "STRING", mode="REQUIRED", description="Payment method used"),
+    ],
 }
-
-products_schema = {
-    "product_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["PRIMARY KEY", "NOT NULL"],
-        "description": "Unique ID for each product",
-    },
-    "product_name": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL"],
-        "description": "Name of the product",
-    },
-    "product_description": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL"],
-        "description": "Short description of the product",
-    },
-}
-
-plans_schema = {
-    "plan_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["PRIMARY KEY", "NOT NULL"],
-        "description": "Unique ID for each plan",
-    },
-    "product_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES products(product_id)", "NOT NULL"],
-        "description": "ID of the product this plan belongs to",
-    },
-    "plan_name": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL"],
-        "description": "Name of the plan (e.g., Free, Pro, Premium)",
-    },
-    "plan_price": {
-        "type": "DECIMAL(10,2)",
-        "python_type": float,
-        "constraints": ["NOT NULL"],
-        "description": "Price of the plan",
-    },
-    "recurring": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL", "ENUM('monthly','yearly')"],
-        "description": "Billing frequency of the plan",
-    },
-}
-
-subscriptions_schema = {
-    "subscription_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["PRIMARY KEY", "NOT NULL"],
-        "description": "Unique ID for each subscription record",
-    },
-    "customer_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES customers(customer_id)", "NOT NULL"],
-        "description": "The customer associated with this subscription",
-    },
-    "plan_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES plans(plan_id)", "NOT NULL"],
-        "description": "The plan this subscription belongs to",
-    },
-    "start_date": {
-        "type": "DATE",
-        "python_type": "datetime.date",
-        "constraints": ["NOT NULL"],
-        "description": "Date when the subscription started",
-    },
-    "end_date": {
-        "type": "DATE",
-        "python_type": "datetime.date",
-        "constraints": ["NULLABLE"],
-        "description": "Date when the subscription ended (if cancelled or switched)",
-    },
-    "status": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL", "ENUM('active','cancelled')"],
-        "description": "Current status of the subscription",
-    },
-    "cancel_date": {
-        "type": "DATE",
-        "python_type": "datetime.date",
-        "constraints": ["NULLABLE"],
-        "description": "Date when the subscription was cancelled (if applicable)",
-    },
-}
-
-discounts_schema = {
-    "discount_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["PRIMARY KEY", "NOT NULL"],
-        "description": "Unique ID for each discount or coupon",
-    },
-    "discount_code": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["UNIQUE", "NOT NULL"],
-        "description": "Code entered by customer to apply discount",
-    },
-    "discount_type": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL", "ENUM('percent','fixed')"],
-        "description": "Type of discount: percentage or fixed amount",
-    },
-    "discount_value": {
-        "type": "DECIMAL(10,2)",
-        "python_type": float,
-        "constraints": ["NOT NULL"],
-        "description": "Value of the discount (percent or fixed amount)",
-    },
-    "valid_from": {
-        "type": "DATE",
-        "python_type": "datetime.date",
-        "constraints": ["NOT NULL"],
-        "description": "Start date when discount is valid",
-    },
-    "valid_to": {
-        "type": "DATE",
-        "python_type": "datetime.date",
-        "constraints": ["NOT NULL"],
-        "description": "End date when discount expires",
-    },
-    "product_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES products(product_id)", "NULLABLE"],
-        "description": "Product the discount applies to (NULL = all products)",
-    },
-    "plan_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES plans(plan_id)", "NULLABLE"],
-        "description": "Plan the discount applies to (NULL = all plans)",
-    },
-    "is_recurring": {
-        "type": "BOOLEAN",
-        "python_type": bool,
-        "constraints": ["NOT NULL"],
-        "description": "Whether the discount applies on every billing cycle",
-    },
-}
-
-subscription_discounts_schema = {
-    "sub_discount_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["PRIMARY KEY", "NOT NULL"],
-        "description": "Unique ID for each subscription-discount relationship",
-    },
-    "subscription_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES subscriptions(subscription_id)", "NOT NULL"],
-        "description": "The subscription this discount is applied to",
-    },
-    "discount_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES discounts(discount_id)", "NOT NULL"],
-        "description": "The discount applied to the subscription",
-    },
-    "applied_date": {
-        "type": "DATE",
-        "python_type": "datetime.date",
-        "constraints": ["NOT NULL"],
-        "description": "Date when discount was applied (usually subscription start date)",
-    },
-    "expiry_date": {
-        "type": "DATE",
-        "python_type": "datetime.date",
-        "constraints": ["NULLABLE"],
-        "description": "Date when discount expired (usually subscription end date)",
-    },
-}
-
-invoices_schema = {
-    "invoice_id": {
-        "type": "INT", 
-        "python_type": int, 
-        "constraints": ["PRIMARY KEY", "NOT NULL"], 
-        "description": "Unique invoice ID"
-    },
-    "subscription_id": {
-        "type": "INT", 
-        "python_type": int, 
-        "constraints": ["FOREIGN KEY REFERENCES subscriptions(subscription_id)", "NOT NULL"],
-        "description": "The subscription associated with this invoice"
-    },
-    "invoice_date": {
-        "type": "DATE", 
-        "python_type": "datetime.date",
-        "constraints": ["NOT NULL"],
-        "description": "Date of the invoice"
-    },
-    "total_due": {
-        "type": "DECIMAL(10,2)",
-        "python_type": float,
-        "constraints": ["NOT NULL"],
-        "description": "Total amount due for the invoice"
-    },
-    "invoice_status": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL", "ENUM('paid','pending')"],
-        "description": "Invoice payment status"
-    },
-}
-
-line_items_schema = {
-    "line_item_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["PRIMARY KEY", "NOT NULL"],
-        "description": "Unique line item ID"
-    },
-    "invoice_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES invoices(invoice_id)", "NOT NULL"],
-        "description": "Invoice associated with this line item"
-    },
-    "plan_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES plans(plan_id)", "NULLABLE"],
-        "description": "Plan ID (NULL for discounts)"
-    },
-    "description": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL"],
-        "description": "Description of the line item"
-    },
-    "amount": {
-        "type": "DECIMAL(10,2)",
-        "python_type": float,
-        "constraints": ["NOT NULL"],
-        "description": "Amount for this line item (negative for discounts)"
-    },
-    "line_type": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL", "ENUM('charge','discount')"],
-        "description": "Type of line item"
-    },
-}
-
-payments_schema = {
-    "payment_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["PRIMARY KEY", "NOT NULL"],
-        "description": "Unique payment ID"
-    },
-    "invoice_id": {
-        "type": "INT",
-        "python_type": int,
-        "constraints": ["FOREIGN KEY REFERENCES invoices(invoice_id)", "NOT NULL"],
-        "description": "Invoice associated with the payment"
-    },
-    "payment_date": {
-        "type": "DATE",
-        "python_type": "datetime.date",
-        "constraints": ["NOT NULL"],
-        "description": "Date of payment attempt"
-    },
-    "amount_paid": {
-        "type": "DECIMAL(10,2)",
-        "python_type": float,
-        "constraints": ["NOT NULL"],
-        "description": "Amount actually paid"
-    },
-    "payment_status": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL", "ENUM('success','failed')"],
-        "description": "Payment status"
-    },
-    "payment_method": {
-        "type": "VARCHAR",
-        "python_type": str,
-        "constraints": ["NOT NULL", "ENUM('Credit','Debit','Paypal','N/A')"],
-        "description": "Payment method used"
-    },
-}
-
-
