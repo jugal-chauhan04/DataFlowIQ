@@ -140,5 +140,9 @@ All written in plain, accessible language so business and technical teams share 
 
 ### Reflection & Key Takeaway  
 
-Misalignment on metric meaning causes more confusion than bad queries ever will. By pausing to clarify, document, and communicate, analysts transform from data providers into trusted business partners. The goal isn’t just to deliver numbers but it’s to make sure everyone believes in what those numbers represent.  
+Misalignment on metric meaning causes more confusion than bad queries ever will. By pausing to clarify, document, and communicate, analysts transform from data providers into trusted business partners. The goal isn’t just to deliver numbers but it’s to make sure everyone believes in what those numbers represent. 
+
+This project is a simplified demonstration of how stakeholder alignment fits into the analytical cycle, the phase where definitions are clarified and expectations are set before any data work begins. In larger organizations, this process often involves multiple stakeholders across Finance, Sales, Product, and Engineering, each shaping how a metric is defined and maintained.  
+
+ 
 
