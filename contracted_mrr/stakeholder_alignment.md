@@ -10,7 +10,7 @@ This project is built around a synthetic SaaS billing dataset hosted in BigQuery
 
 Most analytics portfolios focus on queries and dashboards. This one focuses on what happens before that - *the conversations, clarifications, and agreements that define how a metric should exist in the first place.*
 
-The first use case centers on defining **Contracted Monthly Recurring Revenue (Contracted MRR)** a key financial metric that reflects predictable revenue commitments from active subscriptions. The scenario begins with a request from the company’s CFO, sparking a back-and-forth alignment process to clarify definitions, assumptions, and data limitations before any SQL is written.
+The first use case centers on defining **Contracted Monthly Recurring Revenue (Contracted MRR)** a key financial metric that reflects predictable revenue commitments from active subscriptions. The scenario begins with a request from the company’s CFO, sparking a back-and-forth alignment process to clarify definitions, assumptions, and data limitations before any SQL is written. And after reviewing data capture process of the organization, it becomes clear that the business case aligns better with **Committed Monthly Recurring Revenue** instead, the process of realignment - from initial stakeholder request to refined metric definition - is captured below in this article.
 
 The goal is simple but essential: demonstrate how the analytical process behind metric design: confirming definitions, documenting logic, ensuring reproducibility, and communicating with business stakeholders before a single query runs.
 
@@ -127,6 +127,28 @@ The next email finalizes this alignment, turning a discussion into a formal agre
 > CFO, SRC Analytics  
 >  
 
+### Metric Realignemnt  
+
+After finalizing the definition with the CFO, I revisited how SRC Analytics actually captures data in the warehouse. During that review, I realized that the synthetic data generation function only records subscriptions after their first invoice is generated, meaning we don’t have visibility into contracts that have been signed but haven’t started billing yet.
+
+Because of this, the metric I initially labeled as Contracted MRR doesn’t fully align with our data reality. To maintain clarity and accuracy, I have to follow up with the CFO to realign the terminology. What we’re truly measuring is Committed MRR - a recurring revenue from active, billing subscriptions and not future contracted deals that haven’t yet gone live.
+
+This clarification demonstrates how definitions evolve as analysts better understand the systems behind their metrics, ensuring that business logic and data logic stay perfectly in sync.  
+
+> Subject: MRR Definition Update — Contracted vs. Committed
+> 
+> Hi [CFO’s Name],
+>
+> After reviewing how our data is captured in the warehouse, I realized our pipeline only records subscriptions once billing begins. Since we don’t capture pre-billing contracts, the metric we’ve been calling Contracted MRR more accurately reflects active, billing subscriptions.
+> 
+> To stay consistent with what our data represents, I recommend renaming it to Committed MRR. The calculation logic remains the same, it still measures predictable recurring revenue but the new name aligns better with our system’s scope.
+> 
+> If we later include pre-billing data from Sales Ops or a CRM, we can reintroduce Contracted MRR as a distinct forward-looking metric. I’ll update the metric glossary to reflect this clarification.
+> 
+> Best,
+> Jugal Chauhan
+> Data Analyst, SRC Analytics  
+
 ### The Analyst's Next Step  
 
 Following this confirmation, the analyst’s task is to formalize the agreement into a data dictionary effectively, a contract that the entire organization can reference. The document should capture:
@@ -140,7 +162,7 @@ All written in plain, accessible language so business and technical teams share 
 
 ### Reflection & Key Takeaway  
 
-Misalignment on metric meaning causes more confusion than bad queries ever will. By pausing to clarify, document, and communicate, analysts transform from data providers into trusted business partners. The goal isn’t just to deliver numbers but it’s to make sure everyone believes in what those numbers represent. 
+Misalignment on metric meaning causes more confusion than bad queries ever will. By pausing to clarify, document, and communicate, analysts transform from data providers into trusted business partners. Like in this example, initially the focus was to define Contracted MRR and after reviewing the data capture process it was decided that Committed MRR aligns better with what the goal of business case is. The process isn’t just to deliver numbers but it’s to make sure everyone believes in what those numbers represent. 
 
 This project is a simplified demonstration of how stakeholder alignment fits into the analytical cycle, the phase where definitions are clarified and expectations are set before any data work begins. In larger organizations, this process often involves multiple stakeholders across Finance, Sales, Product, and Engineering, each shaping how a metric is defined and maintained.  
 
