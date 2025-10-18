@@ -3,8 +3,8 @@
 from datetime import datetime
 
 # TIMEFRAME FOR DATA GENERATION
-START_DATE = datetime(2022, 1, 1)
-END_DATE = datetime(2024, 12, 31)
+START_DATE = datetime(2024, 1, 1).date()
+END_DATE = datetime.today().date()
 
 # DATASET SIZES
 N_CUSTOMERS = 10

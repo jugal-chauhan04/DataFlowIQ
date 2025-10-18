@@ -111,72 +111,91 @@ def generate_subscription_row(sub_id, customer_id, plan, start_date, status=None
 
 def choose_new_plan(current_plan, plans):
     """
-    Given a current plan, choose a new plan for upgrade/downgrade.
+    Given a current plan, decide whether to cancel, downgrade, or upgrade.
+    - Includes Pro -> Free downgrade scenario.
+    - Chooses new plan only within the same product_id.
+    - Returns (new_plan, status).
     """
-    if "Pro" in current_plan.plan_name:
-        # Upgrade PRO -> PREMIUM
-        return plans[
-            (plans["plan_name"].str.contains("Premium"))
-            & (plans["product_id"] == current_plan.product_id)
-        ].sample(1).iloc[0]
-    
-    elif "Premium" in current_plan.plan_name:
-        # Downgrade PREMIUM -> PRO
-        return plans[
-            (plans["plan_name"].str.contains("Pro"))
-            & (plans["product_id"] == current_plan.product_id)
-        ].sample(1).iloc[0]
-    
-    elif "Free" in current_plan.plan_name:
-        # Upgrade FREE -> PRO or PREMIUM
-        return plans[
-            (plans["plan_name"].str.contains("Pro|Premium"))
-            & (plans["product_id"] == current_plan.product_id)
-        ].sample(1).iloc[0]
-    
-    return None
+
+    action = random.choices(
+        ["upgrade", "downgrade", "churn"],
+        weights=[0.4, 0.4, 0.2],  # tweak probabilities as needed
+        k=1
+    )[0]
+
+    product_id = current_plan.product_id
+    current_price = current_plan.plan_price
+
+    if action == "churn":
+        return None, "cancelled"
+
+    if action == "upgrade":
+        # Upgrade to any higher-priced plan (e.g., Free -> Pro or Pro -> Premium)
+        higher_plans = plans[
+            (plans["product_id"] == product_id) &
+            (plans["plan_price"] > current_price)
+        ]
+        if not higher_plans.empty:
+            return higher_plans.sample(1).iloc[0], "upgraded"
+
+    if action == "downgrade":
+        # Downgrade to any lower-priced plan (e.g., Premium -> Pro or Pro -> Free)
+        lower_plans = plans[
+            (plans["product_id"] == product_id) &
+            (plans["plan_price"] < current_price)
+        ]
+        if not lower_plans.empty:
+            return lower_plans.sample(1).iloc[0], "downgraded"
+
+    # Fallback if no valid change found → treat as churn
+    return None, "cancelled"
+
 
 def generate_subscriptions(customers, plans, start_id=100):
-
     """
-    Generate subscription records for each customer.
-
-    Args:
-        customers (pd.DataFrame): Customers dataset
-        plans (pd.DataFrame): Plans dataset
-
-    Returns:
-        pd.DataFrame: Subscriptions dataset
+    Generate subscription records with realistic lifecycle events.
+    Supports:
+    - Upgrade (Free -> Pro, Pro -> Premium)
+    - Downgrade (Premium -> Pro, Pro -> Free)
+    - Cancellation (no new plan)
     """
+
     subscriptions = []
     sub_id = start_id
-    
+
     for _, c in customers.iterrows():
-        # Assign initial plan + subscription row
+        # Initial plan assigned randomly
         plan = plans.sample(1).iloc[0]
         start_date = START_DATE + timedelta(days=random.randint(0, (END_DATE - START_DATE).days))
         row = generate_subscription_row(sub_id, c.customer_id, plan, start_date)
         subscriptions.append(row)
         sub_id += 1
-        
-        # Decide if customer switches plans
+
+        # Simulate plan change for some users
         if random.random() < UPGRADE_PROBABILITY:
             switch_date = start_date + timedelta(days=random.randint(60, 720))
             if switch_date > END_DATE:
                 switch_date = END_DATE
-            
-            # Close old subscription
-            subscriptions[-1][4] = switch_date   # update end_date
-            subscriptions[-1][5] = "cancelled"   # update status
-            subscriptions[-1][6] = switch_date   # update cancel_date
-            
-            # Choose new plan
-            new_plan = choose_new_plan(plan, plans)
+
+            new_plan, status = choose_new_plan(plan, plans)
+
+            # Update current subscription with the reason for change
+            subscriptions[-1][4] = switch_date   # end_date
+            subscriptions[-1][5] = status        # upgraded / downgraded / cancelled
+            subscriptions[-1][6] = switch_date   # cancel_date (end date)
+
+            # If customer switches plan (not churn), add new subscription
             if new_plan is not None:
-                new_row = generate_subscription_row(sub_id, c.customer_id, new_plan, switch_date)
+                new_row = generate_subscription_row(
+                    sub_id,
+                    c.customer_id,
+                    new_plan,
+                    switch_date,
+                    status="active"
+                )
                 subscriptions.append(new_row)
                 sub_id += 1
-    
+
     return pd.DataFrame(
         subscriptions,
         columns=[
@@ -189,6 +208,7 @@ def generate_subscriptions(customers, plans, start_id=100):
             "cancel_date",
         ],
     )
+
 
 def generate_discounts() -> pd.DataFrame:
 
@@ -326,12 +346,13 @@ def generate_payments_invoice(subscriptions, plans, discounts, subscription_disc
 
             # Total for this invoice
             total = sum(li[4] for li in line_items if li[1] == invoice_id)
-
+            status = None
             # Payment + invoice
             if plan.plan_price == 0.0:
                 # Free plan
                 invoices.append([invoice_id, sub.subscription_id, invoice_date, 0.0, "paid"])
                 payments.append([payment_id, invoice_id, invoice_date + timedelta(days=1), 0.0, "success", "N/A"])
+                status = "success"
             else:
                 status = np.random.choice(["success", "failed", "pending"], p=[0.7, 0.2, 0.1])
                 amount_paid = total if status == "success" else 0

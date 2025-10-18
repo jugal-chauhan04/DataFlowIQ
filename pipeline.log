@@ -166,3 +166,43 @@ ValueError: bq_schema contains fields not present in dataframe: {'payment_status
 2025-10-01 11:18:15,858 - INFO - Loaded 42 rows into saas-pipeline.raw_src.line_items |Duration:  3.57 sec
 2025-10-01 11:18:15,858 - INFO - Starting load for saas-pipeline.raw_src.payments | 51 rows 
 2025-10-01 11:18:19,419 - INFO - Loaded 51 rows into saas-pipeline.raw_src.payments |Duration:  3.56 sec
+2025-10-18 16:22:17,676 - INFO - Logging Initialized
+2025-10-18 16:28:56,366 - INFO - Logging Initialized
+2025-10-18 16:29:01,430 - INFO - Starting load for saas-pipeline.raw_src.customers | 5 rows 
+2025-10-18 16:29:05,107 - INFO - Loaded 5 rows into saas-pipeline.raw_src.customers |Duration:  3.68 sec
+2025-10-18 16:29:07,754 - INFO - Starting load for saas-pipeline.raw_src.subscriptions | 6 rows 
+2025-10-18 16:29:11,039 - INFO - Loaded 6 rows into saas-pipeline.raw_src.subscriptions |Duration:  3.29 sec
+2025-10-18 16:29:11,039 - INFO - Starting load for saas-pipeline.raw_src.subscription_discounts | 1 rows 
+2025-10-18 16:29:14,376 - INFO - Loaded 1 rows into saas-pipeline.raw_src.subscription_discounts |Duration:  3.34 sec
+2025-10-18 16:29:14,376 - INFO - Starting load for saas-pipeline.raw_src.invoices | 64 rows 
+2025-10-18 16:29:17,330 - INFO - Loaded 64 rows into saas-pipeline.raw_src.invoices |Duration:  2.95 sec
+2025-10-18 16:29:17,330 - INFO - Starting load for saas-pipeline.raw_src.line_items | 44 rows 
+2025-10-18 16:29:20,028 - INFO - Loaded 44 rows into saas-pipeline.raw_src.line_items |Duration:  2.70 sec
+2025-10-18 16:29:20,028 - INFO - Starting load for saas-pipeline.raw_src.payments | 52 rows 
+2025-10-18 16:29:22,978 - INFO - Loaded 52 rows into saas-pipeline.raw_src.payments |Duration:  2.95 sec
+2025-10-18 16:32:07,059 - INFO - Logging Initialized
+2025-10-18 16:32:12,661 - INFO - Starting load for saas-pipeline.raw_src.customers | 5 rows 
+2025-10-18 16:32:16,445 - INFO - Loaded 5 rows into saas-pipeline.raw_src.customers |Duration:  3.78 sec
+2025-10-18 16:32:18,543 - INFO - Starting load for saas-pipeline.raw_src.subscriptions | 6 rows 
+2025-10-18 16:32:21,573 - INFO - Loaded 6 rows into saas-pipeline.raw_src.subscriptions |Duration:  3.03 sec
+2025-10-18 16:32:21,574 - INFO - Starting load for saas-pipeline.raw_src.subscription_discounts | 1 rows 
+2025-10-18 16:32:23,803 - INFO - Loaded 1 rows into saas-pipeline.raw_src.subscription_discounts |Duration:  2.23 sec
+2025-10-18 16:32:23,803 - INFO - Starting load for saas-pipeline.raw_src.invoices | 106 rows 
+2025-10-18 16:32:27,278 - INFO - Loaded 106 rows into saas-pipeline.raw_src.invoices |Duration:  3.47 sec
+2025-10-18 16:32:27,278 - INFO - Starting load for saas-pipeline.raw_src.line_items | 57 rows 
+2025-10-18 16:32:30,371 - INFO - Loaded 57 rows into saas-pipeline.raw_src.line_items |Duration:  3.09 sec
+2025-10-18 16:32:30,372 - INFO - Starting load for saas-pipeline.raw_src.payments | 61 rows 
+2025-10-18 16:32:33,131 - INFO - Loaded 61 rows into saas-pipeline.raw_src.payments |Duration:  2.76 sec
+2025-10-18 16:32:37,118 - INFO - Logging Initialized
+2025-10-18 16:32:42,683 - INFO - Starting load for saas-pipeline.raw_src.customers | 5 rows 
+2025-10-18 16:32:45,682 - INFO - Loaded 5 rows into saas-pipeline.raw_src.customers |Duration:  3.00 sec
+2025-10-18 16:32:47,531 - INFO - Starting load for saas-pipeline.raw_src.subscriptions | 5 rows 
+2025-10-18 16:32:50,138 - INFO - Loaded 5 rows into saas-pipeline.raw_src.subscriptions |Duration:  2.61 sec
+2025-10-18 16:32:50,138 - INFO - Starting load for saas-pipeline.raw_src.subscription_discounts | 1 rows 
+2025-10-18 16:32:54,372 - INFO - Loaded 1 rows into saas-pipeline.raw_src.subscription_discounts |Duration:  4.23 sec
+2025-10-18 16:32:54,372 - INFO - Starting load for saas-pipeline.raw_src.invoices | 22 rows 
+2025-10-18 16:32:56,866 - INFO - Loaded 22 rows into saas-pipeline.raw_src.invoices |Duration:  2.49 sec
+2025-10-18 16:32:56,867 - INFO - Starting load for saas-pipeline.raw_src.line_items | 17 rows 
+2025-10-18 16:32:59,400 - INFO - Loaded 17 rows into saas-pipeline.raw_src.line_items |Duration:  2.53 sec
+2025-10-18 16:32:59,400 - INFO - Starting load for saas-pipeline.raw_src.payments | 21 rows 
+2025-10-18 16:33:01,988 - INFO - Loaded 21 rows into saas-pipeline.raw_src.payments |Duration:  2.59 sec
